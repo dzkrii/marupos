@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * ============================================
+ * RESTOZEN - SaaS POS Resto Color System
+ * ============================================
+ * 
+ * Color Palette explained:
+ * - Primary (Red): Button order/reservasi, urgency, appetizing
+ * - Secondary (Green): Success states, order selesai, fresh ingredients
+ * - Accent (Orange): Highlights, antrian, promo, energetic
+ * - Warning (Yellow): Low stock, meja penuh, alerts
+ * - Neutral (Gray): Background, text, dashboard elements
+ * 
+ * Usage: Use Tailwind classes like bg-primary-500, text-secondary-600, etc.
+ * To change theme, simply update the RGB values below.
+ */
+
+@layer base {
+    :root {
+        /* ========== PRIMARY - Merah Hangat (Red) ========== */
+        /* Based on Tailwind red palette centered on #EF4444 (red-500) */
+        --color-primary-50: 254 242 242; /* #FEF2F2 */
+        --color-primary-100: 254 226 226; /* #FEE2E2 */
+        --color-primary-200: 254 202 202; /* #FECACA */
+        --color-primary-300: 252 165 165; /* #FCA5A5 */
+        --color-primary-400: 248 113 113; /* #F87171 */
+        --color-primary-500: 239 68 68; /* #EF4444 - Main */
+        --color-primary-600: 220 38 38; /* #DC2626 */
+        --color-primary-700: 185 28 28; /* #B91C1C */
+        --color-primary-800: 153 27 27; /* #991B1B */
+        --color-primary-900: 127 29 29; /* #7F1D1D */
+        --color-primary-950: 69 10 10; /* #450A0A */
+
+        /* ========== SECONDARY - Hijau Segar (Green) ========== */
+        /* Based on Tailwind emerald palette centered on #10B981 (green-500) */
+        --color-secondary-50: 236 253 245; /* #ECFDF5 */
+        --color-secondary-100: 209 250 229; /* #D1FAE5 */
+        --color-secondary-200: 167 243 208; /* #A7F3D0 */
+        --color-secondary-300: 110 231 183; /* #6EE7B7 */
+        --color-secondary-400: 52 211 153; /* #34D399 */
+        --color-secondary-500: 16 185 129; /* #10B981 - Main */
+        --color-secondary-600: 5 150 105; /* #059669 */
+        --color-secondary-700: 4 120 87; /* #047857 */
+        --color-secondary-800: 6 95 70; /* #065F46 */
+        --color-secondary-900: 6 78 59; /* #064E3B */
+        --color-secondary-950: 2 44 34; /* #022C22 */
+
+        /* ========== ACCENT - Oranye (Orange) ========== */
+        /* Based on Tailwind amber palette centered on #F59E0B (orange-500) */
+        --color-accent-50: 255 251 235; /* #FFFBEB */
+        --color-accent-100: 254 243 199; /* #FEF3C7 */
+        --color-accent-200: 253 230 138; /* #FDE68A */
+        --color-accent-300: 252 211 77; /* #FCD34D */
+        --color-accent-400: 251 191 36; /* #FBBF24 */
+        --color-accent-500: 245 158 11; /* #F59E0B - Main */
+        --color-accent-600: 217 119 6; /* #D97706 */
+        --color-accent-700: 180 83 9; /* #B45309 */
+        --color-accent-800: 146 64 14; /* #92400E */
+        --color-accent-900: 120 53 15; /* #78350F */
+        --color-accent-950: 69 26 3; /* #451A03 */
+
+        /* ========== WARNING - Kuning (Yellow) ========== */
+        /* Based on Tailwind yellow palette centered on #EAB308 (yellow-500) */
+        --color-warning-50: 254 252 232; /* #FEFCE8 */
+        --color-warning-100: 254 249 195; /* #FEF9C3 */
+        --color-warning-200: 254 240 138; /* #FEF08A */
+        --color-warning-300: 253 224 71; /* #FDE047 */
+        --color-warning-400: 250 204 21; /* #FACC15 */
+        --color-warning-500: 234 179 8; /* #EAB308 - Main */
+        --color-warning-600: 202 138 4; /* #CA8A04 */
+        --color-warning-700: 161 98 7; /* #A16207 */
+        --color-warning-800: 133 77 14; /* #854D0E */
+        --color-warning-900: 113 63 18; /* #713F12 */
+        --color-warning-950: 66 32 6; /* #422006 */
+
+        /* ========== NEUTRAL - Abu-abu (Gray) ========== */
+        /* Used for backgrounds, text, and dashboard elements */
+        /* Using Tailwind gray palette */
+        --color-neutral-50: 249 250 251; /* #F9FAFB */
+        --color-neutral-100: 243 244 246; /* #F3F4F6 - Background */
+        --color-neutral-200: 229 231 235; /* #E5E7EB */
+        --color-neutral-300: 209 213 219; /* #D1D5DB */
+        --color-neutral-400: 156 163 175; /* #9CA3AF */
+        --color-neutral-500: 107 114 128; /* #6B7280 - Text */
+        --color-neutral-600: 75 85 99; /* #4B5563 */
+        --color-neutral-700: 55 65 81; /* #374151 */
+        --color-neutral-800: 31 41 55; /* #1F2937 */
+        --color-neutral-900: 17 24 39; /* #111827 */
+        --color-neutral-950: 3 7 18; /* #030712 */
+    }
+
+    /* Dark mode overrides (if needed in future) */
+    .dark {
+        /* Override with dark mode values if needed */
+    }
+}
+
+/* ========== Custom Component Classes ========== */
+@layer components {
+    /* Primary Button */
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-4 py-2 
+               bg-primary-500 text-white font-medium rounded-lg
+               hover:bg-primary-600 focus:outline-none focus:ring-2 
+               focus:ring-primary-500 focus:ring-offset-2
+               transition-colors duration-200;
+    }
+
+    /* Secondary Button */
+    .btn-secondary {
+        @apply inline-flex items-center justify-center px-4 py-2 
+               bg-secondary-500 text-white font-medium rounded-lg
+               hover:bg-secondary-600 focus:outline-none focus:ring-2 
+               focus:ring-secondary-500 focus:ring-offset-2
+               transition-colors duration-200;
+    }
+
+    /* Accent Button */
+    .btn-accent {
+        @apply inline-flex items-center justify-center px-4 py-2 
+               bg-accent-500 text-white font-medium rounded-lg
+               hover:bg-accent-600 focus:outline-none focus:ring-2 
+               focus:ring-accent-500 focus:ring-offset-2
+               transition-colors duration-200;
+    }
+
+    /* Outline Button */
+    .btn-outline {
+        @apply inline-flex items-center justify-center px-4 py-2 
+               border-2 border-primary-500 text-primary-500 font-medium rounded-lg
+               hover:bg-primary-50 focus:outline-none focus:ring-2 
+               focus:ring-primary-500 focus:ring-offset-2
+               transition-colors duration-200;
+    }
+
+    /* Card Component */
+    .card {
+        @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+    }
+
+    /* Status Badge - Available */
+    .badge-available {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+               bg-secondary-100 text-secondary-800;
+    }
+
+    /* Status Badge - Occupied */
+    .badge-occupied {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+               bg-primary-100 text-primary-800;
+    }
+
+    /* Status Badge - Reserved */
+    .badge-reserved {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+               bg-accent-100 text-accent-800;
+    }
+
+    /* Status Badge - Warning */
+    .badge-warning {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+               bg-warning-100 text-warning-800;
+    }
+}
