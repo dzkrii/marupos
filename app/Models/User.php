@@ -109,5 +109,22 @@ class User extends Authenticatable
             ->wherePivotIn('role', ['owner', 'manager'])
             ->exists();
     }
+
+    /**
+     * Get the current active outlet from session or default.
+     */
+    public function getCurrentOutletAttribute(): ?Outlet
+    {
+        $outletId = session('current_outlet_id');
+
+        if ($outletId) {
+            $outlet = $this->outlets()->where('outlet_id', $outletId)->first();
+            if ($outlet) {
+                return $outlet;
+            }
+        }
+
+        return $this->defaultOutlet();
+    }
 }
 
