@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index()
+
     {
         $user = auth()->user();
         $outlet = $user->currentOutlet;
@@ -25,7 +26,15 @@ class DashboardController extends Controller
             'maintenance_tables' => 0,
             'today_orders' => 0,
             'today_revenue' => 0,
+            'this_month_revenue' => 0,
             'pending_orders' => 0,
+            'total_orders' => 0,
+            'total_revenue' => 0,
+            'orders_growth' => 0,
+            'revenue_growth' => 0,
+            'monthly_sales' => [],
+            'months' => [],
+            'monthly_target' => 20000000, // Example target: 20 Million
         ];
 
         if ($outlet) {
@@ -55,6 +64,68 @@ class DashboardController extends Controller
                     Order::STATUS_READY,
                     Order::STATUS_SERVED
                 ])->count();
+
+            // Total Stats & Growth
+            $now = now();
+            $startOfMonth = $now->copy()->startOfMonth();
+            $endOfMonth = $now->copy()->endOfMonth();
+            $startOfLastMonth = $now->copy()->subMonth()->startOfMonth();
+            $endOfLastMonth = $now->copy()->subMonth()->endOfMonth();
+
+            // Total Orders
+            $stats['total_orders'] = Order::where('outlet_id', $outlet->id)->count();
+            
+            $thisMonthOrders = Order::where('outlet_id', $outlet->id)
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->count();
+            
+            $lastMonthOrders = Order::where('outlet_id', $outlet->id)
+                ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
+                ->count();
+
+            if ($lastMonthOrders > 0) {
+                $stats['orders_growth'] = (($thisMonthOrders - $lastMonthOrders) / $lastMonthOrders) * 100;
+            } elseif ($thisMonthOrders > 0) {
+                $stats['orders_growth'] = 100;
+            }
+
+            // Total Revenue
+            $stats['total_revenue'] = Order::where('outlet_id', $outlet->id)
+                ->where('status', Order::STATUS_COMPLETED)
+                ->sum('total_amount');
+
+            $thisMonthRevenue = Order::where('outlet_id', $outlet->id)
+                ->where('status', Order::STATUS_COMPLETED)
+                ->whereBetween('completed_at', [$startOfMonth, $endOfMonth])
+                ->sum('total_amount');
+            
+            $stats['this_month_revenue'] = $thisMonthRevenue;
+
+            $lastMonthRevenue = Order::where('outlet_id', $outlet->id)
+                ->where('status', Order::STATUS_COMPLETED)
+                ->whereBetween('completed_at', [$startOfLastMonth, $endOfLastMonth])
+                ->sum('total_amount');
+
+            if ($lastMonthRevenue > 0) {
+                $stats['revenue_growth'] = (($thisMonthRevenue - $lastMonthRevenue) / $lastMonthRevenue) * 100;
+            } elseif ($thisMonthRevenue > 0) {
+                $stats['revenue_growth'] = 100;
+            }
+
+            // Monthly Sales Chart Data (Last 12 months)
+            for ($i = 11; $i >= 0; $i--) {
+                $date = $now->copy()->subMonths($i);
+                $start = $date->copy()->startOfMonth();
+                $end = $date->copy()->endOfMonth();
+                
+                $revenue = Order::where('outlet_id', $outlet->id)
+                    ->where('status', Order::STATUS_COMPLETED)
+                    ->whereBetween('completed_at', [$start, $end])
+                    ->sum('total_amount');
+                
+                $stats['monthly_sales'][] = $revenue;
+                $stats['months'][] = $date->format('M');
+            }
         }
 
         return view('dashboard', compact('stats'));
