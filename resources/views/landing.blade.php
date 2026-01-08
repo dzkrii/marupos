@@ -24,7 +24,7 @@
         <!-- Navbar (updated to match new hero style) -->
         <nav class="z-50 flex items-center justify-between w-full py-4 px-6 md:px-16 lg:px-24 xl:px-32 backdrop-blur-md bg-white/80 text-neutral-800 text-sm sticky top-0 border-b border-neutral-100">
             <a href="/" class="flex items-center gap-3">
-                <img src="{{ asset('images/logo-premium.png') }}" alt="RestoZen Logo" class="h-8 w-auto">
+                <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen Logo" class="h-8 w-auto">
             </a>
 
             <div class="hidden md:flex items-center gap-8 transition duration-500">
@@ -446,7 +446,7 @@
             <div class="grid md:grid-cols-4 gap-12 mb-12">
                 <div class="md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
-                        <img src="{{ asset('images/logo-premium.png') }}" alt="RestoZen Logo" class="h-8 w-auto brightness-0 invert">
+                        <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen Logo" class="h-8 w-auto brightness-0 invert">
                     </div>
                     <p class="text-neutral-400 mb-6 max-w-sm">Sistem POS modern untuk restoran Indonesia. Kelola bisnis lebih efisien dengan teknologi terkini.</p>
                     <div class="flex gap-4">
