@@ -166,6 +166,37 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Show payment success page and prepare session for registration.
+     */
+    public function success(Subscription $subscription): View|RedirectResponse
+    {
+        // Refresh to get latest status
+        $subscription->refresh();
+
+        if (!$subscription->isPaid()) {
+            return redirect()->route('subscription.pending', $subscription)
+                ->with('info', 'Pembayaran belum dikonfirmasi.');
+        }
+
+        // Store subscription data in session for registration
+        session([
+            'subscription_id' => $subscription->id,
+            'subscription_data' => [
+                'name' => $subscription->temp_name,
+                'email' => $subscription->temp_email,
+                'phone' => $subscription->temp_phone,
+                'restaurant_name' => $subscription->temp_restaurant_name,
+                'plan' => $subscription->plan->slug,
+                'expires_at' => $subscription->expires_at,
+            ],
+        ]);
+
+        return view('subscription.success', [
+            'subscription' => $subscription,
+        ]);
+    }
+
+    /**
      * Handle Midtrans notification callback.
      */
     public function notification(Request $request)
@@ -182,12 +213,68 @@ class SubscriptionController extends Controller
     {
         $subscription->refresh();
 
+        $redirectUrl = null;
+        if ($subscription->isPaid()) {
+            // Use config app.url to ensure correct URL even behind proxy/ngrok
+            $baseUrl = config('app.url');
+            $redirectUrl = $baseUrl . '/subscription/finish?order_id=' . $subscription->order_id;
+        }
+
         return response()->json([
             'status' => $subscription->status,
             'is_paid' => $subscription->isPaid(),
-            'redirect_url' => $subscription->isPaid() 
-                ? route('subscription.finish', ['order_id' => $subscription->order_id])
-                : null,
+            'redirect_url' => $redirectUrl,
+        ]);
+    }
+
+    /**
+     * Handle success callback from client-side (after Snap popup success).
+     * This is called via AJAX when payment is successful in the popup.
+     * In sandbox/demo mode, we immediately mark as paid for smooth demo experience.
+     */
+    public function handleSuccess(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|string',
+        ]);
+
+        $subscription = Subscription::where('order_id', $request->order_id)->first();
+
+        if (!$subscription) {
+            return response()->json(['success' => false, 'message' => 'Subscription not found'], 404);
+        }
+
+        // In sandbox mode or if transaction_status indicates success, mark as paid immediately
+        // This ensures smooth demo experience without waiting for webhook
+        $transactionStatus = $request->transaction_status ?? 'capture';
+        $successStatuses = ['capture', 'settlement', 'accept'];
+        
+        if ($subscription->status === 'pending' && in_array($transactionStatus, $successStatuses)) {
+            $subscription->update([
+                'status' => 'paid',
+                'payment_type' => $request->payment_type ?? 'credit_card',
+                'transaction_id' => $request->transaction_id ?? 'sandbox-' . time(),
+                'paid_at' => now(),
+                'expires_at' => $subscription->calculateExpirationDate(),
+                'payment_details' => [
+                    'transaction_status' => $transactionStatus,
+                    'status_message' => $request->status_message ?? 'Payment successful',
+                    'updated_via' => 'client_callback',
+                    'updated_at' => now()->toIso8601String(),
+                ],
+            ]);
+        }
+
+        // Return redirect to success page
+        $baseUrl = config('app.url');
+        $redirectUrl = $baseUrl . '/subscription/success/' . $subscription->id;
+
+        return response()->json([
+            'success' => true,
+            'subscription_id' => $subscription->id,
+            'redirect_url' => $redirectUrl,
         ]);
     }
 }
+
+

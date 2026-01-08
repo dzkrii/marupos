@@ -116,23 +116,47 @@
     </div>
 
     <script>
-        // Auto-check payment status every 10 seconds
+        // Auto-check payment status
         function checkPaymentStatus() {
-            fetch('{{ route('subscription.check-status', $subscription) }}')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.is_paid && data.redirect_url) {
+            const statusEl = document.getElementById('status-checker');
+            
+            fetch('{{ route('subscription.check-status', $subscription) }}', {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Status check:', data);
+                
+                if (data.is_paid && data.redirect_url) {
+                    statusEl.innerHTML = `
+                        <div class="flex items-center justify-center gap-2 text-success-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Pembayaran dikonfirmasi! Mengalihkan...
+                        </div>
+                    `;
+                    setTimeout(() => {
                         window.location.href = data.redirect_url;
-                    }
-                })
-                .catch(error => console.error('Error checking status:', error));
+                    }, 1000);
+                }
+            })
+            .catch(error => {
+                console.error('Error checking status:', error);
+            });
         }
 
-        // Check every 10 seconds
-        setInterval(checkPaymentStatus, 10000);
-        
-        // Initial check after 5 seconds
-        setTimeout(checkPaymentStatus, 5000);
+        // Check immediately when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            checkPaymentStatus();
+        });
+
+        // Also check every 5 seconds
+        setInterval(checkPaymentStatus, 5000);
     </script>
 </body>
 </html>
+

@@ -30,6 +30,10 @@ Route::prefix('subscription')->name('subscription.')->group(function () {
     Route::get('/finish', [SubscriptionController::class, 'finish'])->name('finish');
     Route::get('/pending/{subscription}', [SubscriptionController::class, 'pending'])->name('pending');
     Route::get('/check-status/{subscription}', [SubscriptionController::class, 'checkStatus'])->name('check-status');
+    Route::get('/success/{subscription}', [SubscriptionController::class, 'success'])->name('success');
+    
+    // Handle success callback from client-side
+    Route::post('/handle-success', [SubscriptionController::class, 'handleSuccess'])->name('handle-success');
     
     // Midtrans Notification Callback (webhook)
     Route::post('/notification', [SubscriptionController::class, 'notification'])->name('notification');
