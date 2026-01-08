@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         html { scroll-behavior: smooth; }
     </style>
@@ -22,32 +23,28 @@
         </div>
 
         <!-- Navbar (updated to match new hero style) -->
-        <nav class="z-50 flex items-center justify-between w-full py-4 px-6 md:px-16 lg:px-24 xl:px-32 backdrop-blur-md bg-white/80 text-neutral-800 text-sm sticky top-0 border-b border-neutral-100">
+        <nav class="sticky top-0 z-[999] flex items-center w-full py-4 px-6 md:px-16 lg:px-24 xl:px-32 backdrop-blur-md bg-white/80 text-neutral-800 text-sm border-b border-neutral-100">
             <a href="/" class="flex items-center gap-3">
                 <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen Logo" class="h-8 w-auto">
             </a>
 
-            <div class="hidden md:flex items-center gap-8 transition duration-500">
+            <!-- Menu always centered -->
+            <div class="hidden md:flex items-center gap-8 flex-1 justify-center transition duration-500">
                 <a href="#features" class="hover:text-primary-500 transition">Fitur</a>
                 <a href="#pricing" class="hover:text-primary-500 transition">Harga</a>
                 <a href="#contact" class="hover:text-primary-500 transition">Kontak</a>
             </div>
 
+            <!-- Auth buttons always visible -->
             <div class="hidden md:flex items-center gap-3">
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="px-6 py-2 bg-primary-500 hover:bg-primary-600 transition text-white rounded-lg font-medium">
-                        Dashboard
+                <a href="{{ route('login') }}" class="hover:bg-neutral-100 transition px-6 py-2 border border-primary-500 text-primary-600 rounded-lg font-medium">
+                    Masuk
+                </a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="px-6 py-2 bg-primary-500 hover:bg-primary-600 transition text-white rounded-lg font-medium">
+                        Daftar
                     </a>
-                @else
-                    <a href="{{ route('login') }}" class="hover:bg-neutral-100 transition px-6 py-2 border border-primary-500 text-primary-600 rounded-lg font-medium">
-                        Masuk
-                    </a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="px-6 py-2 bg-primary-500 hover:bg-primary-600 transition text-white rounded-lg font-medium">
-                            Daftar Gratis
-                        </a>
-                    @endif
-                @endauth
+                @endif
             </div>
 
             <!-- Mobile Menu Button -->
@@ -61,14 +58,10 @@
             <a href="#features" onclick="closeMenuHandler()">Fitur</a>
             <a href="#pricing" onclick="closeMenuHandler()">Harga</a>
             <a href="#contact" onclick="closeMenuHandler()">Kontak</a>
-            @auth
-                <a href="{{ url('/dashboard') }}" class="px-6 py-2 bg-primary-500 text-white rounded-lg">Dashboard</a>
-            @else
-                <a href="{{ route('login') }}" class="px-6 py-2 border border-primary-500 text-primary-600 rounded-lg">Masuk</a>
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="px-6 py-2 bg-primary-500 text-white rounded-lg">Daftar</a>
-                @endif
-            @endauth
+            <a href="{{ route('login') }}" class="px-6 py-2 border border-primary-500 text-primary-600 rounded-lg">Masuk</a>
+            @if (Route::has('register'))
+                <a href="{{ route('register') }}" class="px-6 py-2 bg-primary-500 text-white rounded-lg">Daftar</a>
+            @endif
             <button id="close-menu" class="active:ring-3 active:ring-primary-200 aspect-square size-10 p-1 items-center justify-center bg-neutral-100 hover:bg-neutral-200 transition text-black rounded-md flex">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
@@ -77,7 +70,7 @@
         <!-- Hero Content -->
         <main class="flex flex-col items-center max-md:px-4 pb-20">
             <!-- Badge -->
-            <a href="{{ route('register') }}" class="mt-24 flex items-center gap-2 border border-primary-200 rounded-full p-1 pr-4 text-sm font-medium text-primary-600 bg-primary-50/50 hover:bg-primary-100/50 transition">
+            <a href="{{ route('register') }}" class="mt-24 flex items-center gap-2 border border-primary-200 rounded-full p-1 pr-4 text-sm font-medium text-primary-600 bg-primary-50/50 hover:bg-primary-100/50 transition" data-aos="fade-up" data-aos-duration="800">
                 <span class="bg-primary-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
                     BARU
                 </span>
@@ -90,17 +83,17 @@
             </a>
 
             <!-- Headline -->
-            <h1 class="text-center text-4xl leading-tight md:text-5xl lg:text-6xl md:leading-[1.2] font-bold max-w-4xl text-neutral-900 mt-8">
+            <h1 class="text-center text-4xl leading-tight md:text-5xl lg:text-6xl md:leading-[1.2] font-bold max-w-4xl text-neutral-900 mt-8" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
                 Kelola Restoran Anda dengan <span class="text-primary-500">Lebih Mudah</span> dan Efisien
             </h1>
 
             <!-- Subtitle -->
-            <p class="text-center text-base md:text-lg text-neutral-600 max-w-2xl mt-6">
+            <p class="text-center text-base md:text-lg text-neutral-600 max-w-2xl mt-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
                 RestoZen membantu Anda mengelola pesanan, menu, meja, dapur, dan laporan keuangan dalam satu platform terintegrasi.
             </p>
 
             <!-- CTA Buttons -->
-            <div class="flex items-center gap-4 mt-10">
+            <div class="flex items-center gap-4 mt-10" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
                 <a href="{{ route('register') }}" class="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white active:scale-95 rounded-xl px-7 h-12 font-semibold transition shadow-lg shadow-primary-500/25">
                     Mulai Gratis
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -113,7 +106,7 @@
             </div>
 
             <!-- Stats -->
-            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16">
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
                 <div class="text-center">
                     <div class="text-3xl md:text-4xl font-bold text-neutral-900">500+</div>
                     <div class="text-neutral-500 text-sm mt-1">Restoran Aktif</div>
@@ -133,7 +126,7 @@
             </div>
 
             <!-- Dashboard Preview -->
-            <div class="mt-16 w-full max-w-5xl px-4">
+            <div class="mt-16 w-full max-w-5xl px-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500">
                 <div class="bg-gradient-to-b from-neutral-100 to-white p-2 md:p-4 rounded-2xl shadow-2xl shadow-neutral-300/50 border border-neutral-200">
                     <div class="bg-neutral-900 rounded-xl overflow-hidden">
                         <!-- Browser Chrome -->
@@ -206,13 +199,13 @@
     <!-- Features Section -->
     <section id="features" class="py-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="800">
                 <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">Fitur Lengkap untuk Bisnis Anda</h2>
                 <p class="text-neutral-600 text-lg max-w-2xl mx-auto">Semua yang Anda butuhkan untuk mengelola restoran modern dalam satu platform.</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Feature 1: POS -->
-                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-primary-200 hover:shadow-lg transition-all group">
+                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-primary-200 hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-duration="600">
                     <div class="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 transition-colors">
                         <svg class="w-7 h-7 text-primary-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
@@ -222,7 +215,7 @@
                     <p class="text-neutral-600">Sistem kasir yang cepat dan mudah digunakan. Proses pesanan dalam hitungan detik dengan antarmuka intuitif.</p>
                 </div>
                 <!-- Feature 2: Menu Management -->
-                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-secondary-200 hover:shadow-lg transition-all group">
+                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-secondary-200 hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
                     <div class="w-14 h-14 bg-secondary-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-secondary-500 transition-colors">
                         <svg class="w-7 h-7 text-secondary-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
@@ -232,7 +225,7 @@
                     <p class="text-neutral-600">Atur menu dengan kategori, harga, gambar, dan ketersediaan. Update menu kapan saja secara real-time.</p>
                 </div>
                 <!-- Feature 3: Table Management -->
-                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-accent-200 hover:shadow-lg transition-all group">
+                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-accent-200 hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
                     <div class="w-14 h-14 bg-accent-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-accent-500 transition-colors">
                         <svg class="w-7 h-7 text-accent-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
@@ -242,7 +235,7 @@
                     <p class="text-neutral-600">Pantau status meja secara real-time. Atur area, kapasitas, dan generate QR code untuk setiap meja.</p>
                 </div>
                 <!-- Feature 4: QR Order -->
-                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-primary-200 hover:shadow-lg transition-all group">
+                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-primary-200 hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
                     <div class="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 transition-colors">
                         <svg class="w-7 h-7 text-primary-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
@@ -252,7 +245,7 @@
                     <p class="text-neutral-600">Pelanggan scan QR di meja untuk melihat menu dan order langsung. Tanpa perlu panggil pelayan.</p>
                 </div>
                 <!-- Feature 5: Kitchen Display -->
-                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-secondary-200 hover:shadow-lg transition-all group">
+                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-secondary-200 hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
                     <div class="w-14 h-14 bg-secondary-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-secondary-500 transition-colors">
                         <svg class="w-7 h-7 text-secondary-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -262,7 +255,7 @@
                     <p class="text-neutral-600">Dapur terima pesanan langsung di layar. Update status masakan real-time tanpa kertas.</p>
                 </div>
                 <!-- Feature 6: Reports -->
-                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-accent-200 hover:shadow-lg transition-all group">
+                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-accent-200 hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-duration="600" data-aos-delay="500">
                     <div class="w-14 h-14 bg-accent-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-accent-500 transition-colors">
                         <svg class="w-7 h-7 text-accent-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
@@ -303,13 +296,13 @@
     <!-- Pricing Section -->
     <section id="pricing" class="py-20 px-4 sm:px-6 lg:px-8 bg-neutral-50">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="800">
                 <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">Pilih Paket yang Sesuai</h2>
                 <p class="text-neutral-600 text-lg">Mulai gratis 14 hari, tanpa kartu kredit.</p>
             </div>
             <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 <!-- Starter Plan -->
-                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:shadow-xl transition-shadow">
+                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:shadow-xl transition-shadow" data-aos="fade-up" data-aos-duration="600">
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold text-neutral-900 mb-2">Starter</h3>
                         <p class="text-neutral-500 text-sm">Untuk restoran kecil yang baru mulai</p>
@@ -345,7 +338,7 @@
                     </a>
                 </div>
                 <!-- Professional Plan -->
-                <div class="bg-neutral-900 p-8 rounded-2xl border-2 border-primary-500 shadow-xl relative">
+                <div class="bg-neutral-900 p-8 rounded-2xl border-2 border-primary-500 shadow-xl relative" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
                     <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-500 text-white text-sm font-medium px-4 py-1 rounded-full">
                         Populer
                     </div>
@@ -388,7 +381,7 @@
                     </a>
                 </div>
                 <!-- Enterprise Plan -->
-                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:shadow-xl transition-shadow">
+                <div class="bg-white p-8 rounded-2xl border border-neutral-200 hover:shadow-xl transition-shadow" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold text-neutral-900 mb-2">Enterprise</h3>
                         <p class="text-neutral-500 text-sm">Untuk jaringan restoran besar</p>
@@ -428,7 +421,7 @@
 
     <!-- CTA Section -->
     <section class="py-20 px-4 sm:px-6 lg:px-8 bg-primary-500">
-        <div class="max-w-4xl mx-auto text-center">
+        <div class="max-w-4xl mx-auto text-center" data-aos="fade-up" data-aos-duration="800">
             <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">Siap Tingkatkan Bisnis Restoran Anda?</h2>
             <p class="text-primary-100 text-lg mb-10">Mulai gratis 14 hari. Tidak perlu kartu kredit. Batalkan kapan saja.</p>
             <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-white text-primary-600 font-semibold text-lg px-8 py-4 rounded-xl hover:bg-neutral-100 transition">
@@ -446,7 +439,7 @@
             <div class="grid md:grid-cols-4 gap-12 mb-12">
                 <div class="md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
-                        <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen Logo" class="h-8 w-auto brightness-0 invert">
+                        <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen Logo" class="h-8 w-auto">
                     </div>
                     <p class="text-neutral-400 mb-6 max-w-sm">Sistem POS modern untuk restoran Indonesia. Kelola bisnis lebih efisien dengan teknologi terkini.</p>
                     <div class="flex gap-4">
@@ -480,5 +473,15 @@
             </div>
         </div>
     </footer>
+
+    <!-- AOS Animation Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            duration: 800,
+            easing: 'ease-out',
+        });
+    </script>
 </body>
 </html>
