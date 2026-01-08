@@ -8,6 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TableAreaController;
 use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,30 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('landing');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Subscription Routes (Public)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('subscription')->name('subscription.')->group(function () {
+    Route::get('/plans', [SubscriptionController::class, 'plans'])->name('plans');
+    Route::get('/checkout/{plan:slug}', [SubscriptionController::class, 'checkout'])->name('checkout');
+    Route::post('/process-checkout', [SubscriptionController::class, 'processCheckout'])->name('process-checkout');
+    Route::get('/payment/{subscription}', [SubscriptionController::class, 'payment'])->name('payment');
+    Route::get('/finish', [SubscriptionController::class, 'finish'])->name('finish');
+    Route::get('/pending/{subscription}', [SubscriptionController::class, 'pending'])->name('pending');
+    Route::get('/check-status/{subscription}', [SubscriptionController::class, 'checkStatus'])->name('check-status');
+    
+    // Midtrans Notification Callback (webhook)
+    Route::post('/notification', [SubscriptionController::class, 'notification'])->name('notification');
+});
+
+// Registration with Subscription
+Route::get('/register/subscription', [App\Http\Controllers\Auth\RegisteredUserController::class, 'createWithSubscription'])
+    ->name('register.subscription');
+Route::post('/register/subscription', [App\Http\Controllers\Auth\RegisteredUserController::class, 'storeWithSubscription'])
+    ->name('register.subscription.store');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'outlet.access'])
@@ -96,3 +121,4 @@ Route::prefix('order')->name('qr.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+

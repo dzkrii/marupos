@@ -25,8 +25,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             SetCurrentOutlet::class,
         ]);
+
+        // Exclude Midtrans notification webhook from CSRF verification
+        $middleware->validateCsrfTokens(except: [
+            'subscription/notification',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
+
 

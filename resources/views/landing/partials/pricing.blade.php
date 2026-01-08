@@ -68,8 +68,8 @@
                         <span class="text-gray-600 dark:text-gray-400">Email Support</span>
                     </li>
                 </ul>
-                <a href="{{ route('register') }}" class="block w-full text-center py-3.5 px-6 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-brand-500 hover:text-brand-500 dark:hover:border-brand-400 dark:hover:text-brand-400 transition-all">
-                    Mulai Gratis
+                <a href="{{ route('subscription.plans') }}" class="block w-full text-center py-3.5 px-6 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-brand-500 hover:text-brand-500 dark:hover:border-brand-400 dark:hover:text-brand-400 transition-all">
+                    Mulai Berlangganan
                 </a>
             </div>
 
@@ -121,8 +121,8 @@
                         <span class="text-gray-300">Priority Support</span>
                     </li>
                 </ul>
-                <a href="{{ route('register') }}" class="block w-full text-center py-3.5 px-6 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-500/25">
-                    Mulai Gratis
+                <a href="{{ route('subscription.plans') }}" class="block w-full text-center py-3.5 px-6 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-500/25">
+                    Mulai Berlangganan
                 </a>
             </div>
 
