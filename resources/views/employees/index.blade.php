@@ -34,13 +34,11 @@
             <div class="flex-1 min-w-[200px]">
                 <x-ui.input name="search" label="Cari" placeholder="Nama, email, atau telepon..." :value="request('search')" />
             </div>
-            <div class="w-40">
-                <x-ui.select name="role" label="Role" :value="request('role')" placeholder="Semua Role">
-                    <option value="owner" {{ request('role') == 'owner' ? 'selected' : '' }}>Owner</option>
-                    <option value="manager" {{ request('role') == 'manager' ? 'selected' : '' }}>Manager</option>
-                    <option value="cashier" {{ request('role') == 'cashier' ? 'selected' : '' }}>Cashier</option>
-                    <option value="waiter" {{ request('role') == 'waiter' ? 'selected' : '' }}>Waiter</option>
-                    <option value="kitchen" {{ request('role') == 'kitchen' ? 'selected' : '' }}>Kitchen</option>
+            <div class="w-48">
+                <x-ui.select name="capability" label="Kemampuan" :value="request('capability')" placeholder="Semua Kemampuan">
+                    @foreach($capabilities as $key => $cap)
+                        <option value="{{ $key }}" {{ request('capability') == $key ? 'selected' : '' }}>{{ $cap['name'] }}</option>
+                    @endforeach
                 </x-ui.select>
             </div>
             <div class="w-36">
@@ -56,7 +54,7 @@
                     </svg>
                     Filter
                 </x-ui.button>
-                @if (request('search') || request('role') || request('status'))
+                @if (request('search') || request('capability') || request('status'))
                     <x-ui.button href="{{ route('employees.index') }}" variant="outline">
                         Reset
                     </x-ui.button>
@@ -88,15 +86,20 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             @foreach ($employees as $employee)
                 @php
-                    $role = $employee->pivot->role ?? 'cashier';
+                    $outlet = auth()->user()->current_outlet;
+                    $employeeCapabilities = $employee->capabilitiesAt($outlet);
+                    $displayRole = $employee->displayRoleAt($outlet);
+                    
+                    // Role color based on display role
                     $roleColors = [
-                        'owner' => 'bg-purple-50 text-purple-700 dark:bg-purple-500/15 dark:text-purple-400',
-                        'manager' => 'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-400',
-                        'cashier' => 'bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-400',
-                        'waiter' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/15 dark:text-warning-400',
-                        'kitchen' => 'bg-orange-50 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400',
+                        'Owner' => 'bg-purple-50 text-purple-700 dark:bg-purple-500/15 dark:text-purple-400',
+                        'Manager' => 'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-400',
+                        'Kasir' => 'bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-400',
+                        'Kitchen' => 'bg-orange-50 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400',
+                        'Pelayan' => 'bg-warning-50 text-warning-700 dark:bg-warning-500/15 dark:text-warning-400',
+                        'Kasir + Kitchen' => 'bg-cyan-50 text-cyan-700 dark:bg-cyan-500/15 dark:text-cyan-400',
                     ];
-                    $roleColor = $roleColors[$role] ?? 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+                    $roleColor = $roleColors[$displayRole] ?? 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
                 @endphp
                 <div class="rounded-xl border border-gray-200 bg-white overflow-hidden transition-shadow hover:shadow-lg dark:border-gray-800 dark:bg-white/[0.03]">
                     <!-- Avatar -->
@@ -129,10 +132,24 @@
                         </div>
 
                         <!-- Role Badge -->
-                        <div class="mb-4">
+                        <div class="mb-2">
                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ $roleColor }}">
-                                {{ ucfirst($role) }}
+                                {{ $displayRole }}
                             </span>
+                        </div>
+
+                        <!-- Capabilities Pills -->
+                        <div class="mb-4 flex flex-wrap gap-1">
+                            @foreach(array_slice($employeeCapabilities, 0, 3) as $cap)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                    {{ $capabilities[$cap]['name'] ?? $cap }}
+                                </span>
+                            @endforeach
+                            @if(count($employeeCapabilities) > 3)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                                    +{{ count($employeeCapabilities) - 3 }} lainnya
+                                </span>
+                            @endif
                         </div>
 
                         <!-- Actions -->
@@ -167,18 +184,26 @@
                                         Reset PIN
                                     </button>
                                 </form>
-                                <form action="{{ route('employees.destroy', $employee) }}" method="POST" class="flex-1"
-                                    onsubmit="return confirm('Yakin ingin menghapus karyawan ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="w-full flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-error-600 border border-gray-200 rounded-lg hover:bg-error-50 dark:text-error-400 dark:border-gray-700 dark:hover:bg-error-500/10 transition-colors">
-                                        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                        Hapus
-                                    </button>
-                                </form>
+                                @if($employee->id !== auth()->id())
+                                    <form action="{{ route('employees.destroy', $employee) }}" method="POST" class="flex-1"
+                                        onsubmit="return confirm('Yakin ingin menghapus karyawan ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="w-full flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-error-600 border border-gray-200 rounded-lg hover:bg-error-50 dark:text-error-400 dark:border-gray-700 dark:hover:bg-error-500/10 transition-colors">
+                                            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                            Hapus
+                                        </button>
+                                    </form>
+                                @else
+                                    <div class="flex-1">
+                                        <span class="w-full flex items-center justify-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 border border-gray-100 rounded-lg dark:text-gray-600 dark:border-gray-800">
+                                            (Anda)
+                                        </span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

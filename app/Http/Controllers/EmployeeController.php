@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\CapabilityMiddleware;
 use App\Models\User;
 use App\Models\Outlet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
@@ -36,9 +36,12 @@ class EmployeeController extends Controller
             });
         }
 
-        // Role filter
-        if ($request->filled('role')) {
-            $query->wherePivot('role', $request->role);
+        // Capability filter
+        if ($request->filled('capability')) {
+            $capability = $request->capability;
+            $query->where(function ($q) use ($capability) {
+                $q->whereRaw("JSON_CONTAINS(outlet_user.capabilities, ?)", ['"' . $capability . '"']);
+            });
         }
 
         // Status filter
@@ -49,7 +52,10 @@ class EmployeeController extends Controller
 
         $employees = $query->orderBy('name', 'asc')->paginate(12);
 
-        return view('employees.index', compact('employees'));
+        // Get all available capabilities for filter dropdown
+        $capabilities = CapabilityMiddleware::CAPABILITIES;
+
+        return view('employees.index', compact('employees', 'capabilities'));
     }
 
     /**
@@ -63,7 +69,10 @@ class EmployeeController extends Controller
             abort(403, 'Tidak ada outlet yang dipilih.');
         }
 
-        return view('employees.create');
+        $capabilities = CapabilityMiddleware::CAPABILITIES;
+        $rolePresets = CapabilityMiddleware::getRolePresets();
+
+        return view('employees.create', compact('capabilities', 'rolePresets'));
     }
 
     /**
@@ -77,15 +86,21 @@ class EmployeeController extends Controller
             abort(403, 'Tidak ada outlet yang dipilih.');
         }
 
+        $validCapabilities = array_keys(CapabilityMiddleware::CAPABILITIES);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone' => 'nullable|string|max:20',
             'password' => 'required|string|min:8',
-            'role' => ['required', Rule::in(['owner', 'manager', 'cashier', 'waiter', 'kitchen'])],
+            'capabilities' => ['required', 'array', 'min:1'],
+            'capabilities.*' => ['string', 'in:' . implode(',', $validCapabilities)],
             'pin' => 'nullable|digits:6',
             'avatar' => 'nullable|image|max:2048',
             'is_default' => 'boolean',
+        ], [
+            'capabilities.required' => 'Pilih minimal satu kemampuan akses.',
+            'capabilities.min' => 'Pilih minimal satu kemampuan akses.',
         ]);
 
         DB::beginTransaction();
@@ -108,9 +123,15 @@ class EmployeeController extends Controller
                 $user->update(['avatar' => $avatarPath]);
             }
 
-            // Attach to outlet with role
+            // Always include dashboard capability
+            $capabilities = $validated['capabilities'];
+            if (!in_array('dashboard', $capabilities)) {
+                array_unshift($capabilities, 'dashboard');
+            }
+
+            // Attach to outlet with capabilities
             $user->outlets()->attach($outlet->id, [
-                'role' => $validated['role'],
+                'capabilities' => json_encode($capabilities),
                 'is_default' => $request->boolean('is_default', false),
             ]);
 
@@ -136,10 +157,13 @@ class EmployeeController extends Controller
             abort(403);
         }
 
-        // Get employee's role at current outlet
-        $currentRole = $employee->roleAt($outlet);
+        // Get employee's capabilities at current outlet
+        $currentCapabilities = $employee->capabilitiesAt($outlet);
 
-        return view('employees.edit', compact('employee', 'currentRole'));
+        $capabilities = CapabilityMiddleware::CAPABILITIES;
+        $rolePresets = CapabilityMiddleware::getRolePresets();
+
+        return view('employees.edit', compact('employee', 'currentCapabilities', 'capabilities', 'rolePresets'));
     }
 
     /**
@@ -153,14 +177,20 @@ class EmployeeController extends Controller
             abort(403);
         }
 
+        $validCapabilities = array_keys(CapabilityMiddleware::CAPABILITIES);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
-            'role' => ['required', Rule::in(['owner', 'manager', 'cashier', 'waiter', 'kitchen'])],
+            'capabilities' => ['required', 'array', 'min:1'],
+            'capabilities.*' => ['string', 'in:' . implode(',', $validCapabilities)],
             'password' => 'nullable|string|min:8',
             'pin' => 'nullable|digits:6',
             'avatar' => 'nullable|image|max:2048',
             'remove_avatar' => 'boolean',
+        ], [
+            'capabilities.required' => 'Pilih minimal satu kemampuan akses.',
+            'capabilities.min' => 'Pilih minimal satu kemampuan akses.',
         ]);
 
         DB::beginTransaction();
@@ -200,9 +230,15 @@ class EmployeeController extends Controller
                 $employee->update(['avatar' => $avatarPath]);
             }
 
-            // Update role at outlet
+            // Always include dashboard capability
+            $capabilities = $validated['capabilities'];
+            if (!in_array('dashboard', $capabilities)) {
+                array_unshift($capabilities, 'dashboard');
+            }
+
+            // Update capabilities at outlet
             $employee->outlets()->updateExistingPivot($outlet->id, [
-                'role' => $validated['role'],
+                'capabilities' => json_encode($capabilities),
             ]);
 
             DB::commit();
@@ -264,6 +300,11 @@ class EmployeeController extends Controller
 
         if (!$outlet || !$employee->hasAccessTo($outlet)) {
             abort(403);
+        }
+
+        // Prevent self-deletion
+        if ($employee->id === Auth::id()) {
+            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
         // Detach from outlet

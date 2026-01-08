@@ -45,72 +45,132 @@ Route::get('/register/subscription', [App\Http\Controllers\Auth\RegisteredUserCo
 Route::post('/register/subscription', [App\Http\Controllers\Auth\RegisteredUserController::class, 'storeWithSubscription'])
     ->name('register.subscription.store');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified', 'outlet.access'])
-    ->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-// Menu & Table Management Routes
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes with Outlet Access
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'verified', 'outlet.access'])->group(function () {
-    // Menu Categories
-    Route::resource('menu-categories', MenuCategoryController::class)->except(['show']);
-    Route::post('menu-categories/reorder', [MenuCategoryController::class, 'reorder'])->name('menu-categories.reorder');
+    
+    // Dashboard - accessible by all authenticated users with outlet access
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Menu Items
-    Route::resource('menu-items', MenuItemController::class)->except(['show']);
-    Route::post('menu-items/{menuItem}/toggle-availability', [MenuItemController::class, 'toggleAvailability'])
-        ->name('menu-items.toggle-availability');
+    /*
+    |--------------------------------------------------------------------------
+    | Menu Management - Requires menu_management capability
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('capability:menu_management')->group(function () {
+        // Menu Categories
+        Route::resource('menu-categories', MenuCategoryController::class)->except(['show']);
+        Route::post('menu-categories/reorder', [MenuCategoryController::class, 'reorder'])->name('menu-categories.reorder');
 
-    // Table Areas
-    Route::resource('table-areas', TableAreaController::class)->except(['show']);
+        // Menu Items
+        Route::resource('menu-items', MenuItemController::class)->except(['show']);
+        Route::post('menu-items/{menuItem}/toggle-availability', [MenuItemController::class, 'toggleAvailability'])
+            ->name('menu-items.toggle-availability');
+    });
 
-    // Tables
-    Route::resource('tables', TableController::class)->except(['show']);
-    Route::post('tables/{table}/status', [TableController::class, 'updateStatus'])->name('tables.update-status');
-    Route::post('tables/{table}/regenerate-qr', [TableController::class, 'regenerateQr'])->name('tables.regenerate-qr');
-    Route::get('tables/{table}/download-qr', [TableController::class, 'downloadQr'])->name('tables.download-qr');
-    Route::get('tables/download-all-qrs', [TableController::class, 'downloadAllQrs'])->name('tables.download-all-qrs');
+    /*
+    |--------------------------------------------------------------------------
+    | Table Management - Requires table_management capability
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('capability:table_management')->group(function () {
+        // Table Areas
+        Route::resource('table-areas', TableAreaController::class)->except(['show']);
 
-    // Orders
-    Route::get('orders/create/menu', [OrderController::class, 'selectMenu'])->name('orders.select-menu');
-    Route::get('orders/create/menu/{table}', [OrderController::class, 'selectMenu'])->name('orders.select-menu.table');
-    Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
-    Route::get('orders/{order}/receipt', [OrderController::class, 'receipt'])->name('orders.receipt');
-    Route::resource('orders', OrderController::class);
+        // Tables
+        Route::resource('tables', TableController::class)->except(['show']);
+        Route::post('tables/{table}/status', [TableController::class, 'updateStatus'])->name('tables.update-status');
+        Route::post('tables/{table}/regenerate-qr', [TableController::class, 'regenerateQr'])->name('tables.regenerate-qr');
+        Route::get('tables/{table}/download-qr', [TableController::class, 'downloadQr'])->name('tables.download-qr');
+        Route::get('tables/download-all-qrs', [TableController::class, 'downloadAllQrs'])->name('tables.download-all-qrs');
+    });
 
-    // Payments
-    Route::get('orders/{order}/payment', [PaymentController::class, 'create'])->name('payments.create');
-    Route::post('orders/{order}/payment', [PaymentController::class, 'store'])->name('payments.store');
+    /*
+    |--------------------------------------------------------------------------
+    | POS / Cashier - Requires cashier capability
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('capability:cashier')->group(function () {
+        Route::get('orders/create', [OrderController::class, 'create'])->name('orders.create');
+        Route::get('orders/create/menu', [OrderController::class, 'selectMenu'])->name('orders.select-menu');
+        Route::get('orders/create/menu/{table}', [OrderController::class, 'selectMenu'])->name('orders.select-menu.table');
+        Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
+        
+        // Payments
+        Route::get('orders/{order}/payment', [PaymentController::class, 'create'])->name('payments.create');
+        Route::post('orders/{order}/payment', [PaymentController::class, 'store'])->name('payments.store');
+    });
 
-    // Kitchen Display System
-    Route::get('/kitchen', [KitchenController::class, 'index'])->name('kitchen.index');
-    Route::get('/kitchen/api/check-new-orders', [KitchenController::class, 'checkNewOrders'])->name('kitchen.check-new');
-    Route::patch('/kitchen/items/{item}', [KitchenController::class, 'updateItemStatus'])->name('kitchen.update-item');
-    Route::post('/kitchen/orders/{order}/ready', [KitchenController::class, 'markOrderReady'])->name('kitchen.mark-ready');
+    /*
+    |--------------------------------------------------------------------------
+    | Orders - Requires orders capability (view and manage orders)
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('capability:orders,cashier')->group(function () {
+        Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+        Route::get('orders/{order}/receipt', [OrderController::class, 'receipt'])->name('orders.receipt');
+    });
 
-    // Financial Reports
-    Route::prefix('reports')->name('reports.')->group(function () {
+    /*
+    |--------------------------------------------------------------------------
+    | Kitchen Display System - Requires kitchen capability
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('capability:kitchen')->group(function () {
+        Route::get('/kitchen', [KitchenController::class, 'index'])->name('kitchen.index');
+        Route::get('/kitchen/api/check-new-orders', [KitchenController::class, 'checkNewOrders'])->name('kitchen.check-new');
+        Route::patch('/kitchen/items/{item}', [KitchenController::class, 'updateItemStatus'])->name('kitchen.update-item');
+        Route::post('/kitchen/orders/{order}/ready', [KitchenController::class, 'markOrderReady'])->name('kitchen.mark-ready');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Employee Management - Requires employees capability
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('capability:employees')->group(function () {
+        Route::resource('employees', \App\Http\Controllers\EmployeeController::class)->except(['show']);
+        Route::post('employees/{employee}/toggle-status', [\App\Http\Controllers\EmployeeController::class, 'toggleStatus'])
+            ->name('employees.toggle-status');
+        Route::post('employees/{employee}/reset-pin', [\App\Http\Controllers\EmployeeController::class, 'resetPin'])
+            ->name('employees.reset-pin');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Financial Reports - Requires reports capability
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware('capability:reports')->prefix('reports')->name('reports.')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
         Route::get('/sales', [ReportController::class, 'sales'])->name('sales');
         Route::get('/payment-methods', [ReportController::class, 'paymentMethods'])->name('payment-methods');
         Route::get('/top-selling', [ReportController::class, 'topSelling'])->name('top-selling');
         Route::get('/export-pdf', [ReportController::class, 'exportPdf'])->name('export-pdf');
     });
-
-    // Employee Management
-    Route::resource('employees', \App\Http\Controllers\EmployeeController::class)->except(['show']);
-    Route::post('employees/{employee}/toggle-status', [\App\Http\Controllers\EmployeeController::class, 'toggleStatus'])
-        ->name('employees.toggle-status');
-    Route::post('employees/{employee}/reset-pin', [\App\Http\Controllers\EmployeeController::class, 'resetPin'])
-        ->name('employees.reset-pin');
 });
 
-// QR Ordering - Public Routes (No Auth Required)
+/*
+|--------------------------------------------------------------------------
+| Profile Routes (Auth Only)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+/*
+|--------------------------------------------------------------------------
+| QR Ordering - Public Routes (No Auth Required)
+|--------------------------------------------------------------------------
+*/
 Route::prefix('order')->name('qr.')->group(function () {
     Route::get('/{outletSlug}/{tableQr}', [\App\Http\Controllers\QrOrderController::class, 'menu'])->name('menu');
     Route::post('/cart/add', [\App\Http\Controllers\QrOrderController::class, 'addToCart'])->name('cart.add');
@@ -125,4 +185,3 @@ Route::prefix('order')->name('qr.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-

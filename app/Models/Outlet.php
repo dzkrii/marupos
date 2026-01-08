@@ -47,7 +47,7 @@ class Outlet extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'outlet_user')
-            ->withPivot(['role', 'is_default'])
+            ->withPivot(['capabilities', 'is_default'])
             ->withTimestamps();
     }
 

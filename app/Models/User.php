@@ -70,7 +70,7 @@ class User extends Authenticatable
     public function outlets(): BelongsToMany
     {
         return $this->belongsToMany(Outlet::class, 'outlet_user')
-            ->withPivot(['role', 'is_default'])
+            ->withPivot(['capabilities', 'is_default'])
             ->withTimestamps();
     }
 
@@ -84,12 +84,117 @@ class User extends Authenticatable
     }
 
     /**
-     * Get user's role at a specific outlet.
+     * Get user's capabilities at a specific outlet.
      */
-    public function roleAt(Outlet $outlet): ?string
+    public function capabilitiesAt(Outlet $outlet): array
     {
         $pivot = $this->outlets()->where('outlet_id', $outlet->id)->first();
-        return $pivot?->pivot->role;
+        
+        if (!$pivot) {
+            return [];
+        }
+        
+        $capabilities = $pivot->pivot->capabilities ?? [];
+        
+        // Ensure it's an array
+        if (is_string($capabilities)) {
+            $capabilities = json_decode($capabilities, true) ?? [];
+        }
+        
+        return $capabilities;
+    }
+
+    /**
+     * Check if user has a specific capability at outlet.
+     */
+    public function hasCapability(string $capability, ?Outlet $outlet = null): bool
+    {
+        $outlet = $outlet ?? $this->current_outlet;
+        
+        if (!$outlet) {
+            return false;
+        }
+        
+        return in_array($capability, $this->capabilitiesAt($outlet));
+    }
+
+    /**
+     * Check if user has any of the specified capabilities at outlet.
+     */
+    public function hasAnyCapability(array $capabilities, ?Outlet $outlet = null): bool
+    {
+        $outlet = $outlet ?? $this->current_outlet;
+        
+        if (!$outlet) {
+            return false;
+        }
+        
+        $userCapabilities = $this->capabilitiesAt($outlet);
+        
+        foreach ($capabilities as $capability) {
+            if (in_array($capability, $userCapabilities)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Check if user has all of the specified capabilities at outlet.
+     */
+    public function hasAllCapabilities(array $capabilities, ?Outlet $outlet = null): bool
+    {
+        $outlet = $outlet ?? $this->current_outlet;
+        
+        if (!$outlet) {
+            return false;
+        }
+        
+        $userCapabilities = $this->capabilitiesAt($outlet);
+        
+        foreach ($capabilities as $capability) {
+            if (!in_array($capability, $userCapabilities)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    /**
+     * Get user's display role based on capabilities (for backward compatibility).
+     */
+    public function displayRoleAt(Outlet $outlet): string
+    {
+        $capabilities = $this->capabilitiesAt($outlet);
+        
+        // Determine display role based on capabilities
+        if (count($capabilities) >= 7 && in_array('employees', $capabilities) && in_array('reports', $capabilities)) {
+            return 'Owner';
+        }
+        
+        if (in_array('employees', $capabilities) || in_array('reports', $capabilities)) {
+            return 'Manager';
+        }
+        
+        if (in_array('cashier', $capabilities) && in_array('kitchen', $capabilities)) {
+            return 'Kasir + Kitchen';
+        }
+        
+        if (in_array('cashier', $capabilities)) {
+            return 'Kasir';
+        }
+        
+        if (in_array('kitchen', $capabilities)) {
+            return 'Kitchen';
+        }
+        
+        if (in_array('orders', $capabilities)) {
+            return 'Pelayan';
+        }
+        
+        return 'Staff';
     }
 
     /**
@@ -101,13 +206,17 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is owner/manager at any outlet.
+     * Check if user is owner/manager (has employees or reports capability) at current outlet.
      */
     public function isManager(): bool
     {
-        return $this->outlets()
-            ->wherePivotIn('role', ['owner', 'manager'])
-            ->exists();
+        $outlet = $this->current_outlet;
+        
+        if (!$outlet) {
+            return false;
+        }
+        
+        return $this->hasAnyCapability(['employees', 'reports'], $outlet);
     }
 
     /**

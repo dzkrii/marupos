@@ -120,9 +120,10 @@ class RegisteredUserController extends Controller
                 'is_active' => true,
             ]);
 
-            // Attach user to outlet as owner
+            // Attach user to outlet as owner with full capabilities
+            $ownerCapabilities = ['dashboard', 'menu_management', 'table_management', 'cashier', 'orders', 'kitchen', 'employees', 'reports'];
             $user->outlets()->attach($outlet->id, [
-                'role' => 'owner',
+                'capabilities' => json_encode($ownerCapabilities),
                 'is_default' => true,
             ]);
 

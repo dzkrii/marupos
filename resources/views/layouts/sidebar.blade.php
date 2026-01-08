@@ -1,6 +1,10 @@
 @php
     $currentPath = request()->path();
+    $user = auth()->user();
+    $outlet = $user->current_outlet;
+    $userCapabilities = $outlet ? $user->capabilitiesAt($outlet) : [];
     
+    // Define menu groups with required capability
     $menuGroups = [
         [
             'title' => 'Menu',
@@ -9,19 +13,22 @@
                     'name' => 'Dashboard',
                     'path' => '/dashboard',
                     'icon' => 'dashboard',
-                    'routes' => ['dashboard']
+                    'routes' => ['dashboard'],
+                    'capability' => 'dashboard', // Everyone with outlet access has dashboard
                 ],
                 [
                     'name' => 'Kategori',
                     'path' => '/menu-categories',
                     'icon' => 'category',
-                    'routes' => ['menu-categories.*']
+                    'routes' => ['menu-categories.*'],
+                    'capability' => 'menu_management',
                 ],
                 [
                     'name' => 'Daftar Menu',
                     'path' => '/menu-items',
                     'icon' => 'menu',
-                    'routes' => ['menu-items.*']
+                    'routes' => ['menu-items.*'],
+                    'capability' => 'menu_management',
                 ],
             ]
         ],
@@ -32,13 +39,15 @@
                     'name' => 'Area Meja',
                     'path' => '/table-areas',
                     'icon' => 'location',
-                    'routes' => ['table-areas.*']
+                    'routes' => ['table-areas.*'],
+                    'capability' => 'table_management',
                 ],
                 [
                     'name' => 'Denah Meja',
                     'path' => '/tables',
                     'icon' => 'table',
-                    'routes' => ['tables.*']
+                    'routes' => ['tables.*'],
+                    'capability' => 'table_management',
                 ],
             ]
         ],
@@ -49,13 +58,15 @@
                     'name' => 'Kasir',
                     'path' => '/orders/create',
                     'icon' => 'cashier',
-                    'routes' => ['orders.create']
+                    'routes' => ['orders.create'],
+                    'capability' => 'cashier',
                 ],
                 [
                     'name' => 'Riwayat Pesanan',
                     'path' => '/orders',
                     'icon' => 'order',
-                    'routes' => ['orders.index', 'orders.show']
+                    'routes' => ['orders.index', 'orders.show'],
+                    'capability' => 'orders',
                 ],
             ]
         ],
@@ -66,23 +77,41 @@
                     'name' => 'Kitchen Display',
                     'path' => '/kitchen',
                     'icon' => 'kitchen',
-                    'routes' => ['kitchen.*']
+                    'routes' => ['kitchen.*'],
+                    'capability' => 'kitchen',
                 ],
                 [
                     'name' => 'Karyawan',
                     'path' => '/employees',
                     'icon' => 'employees',
-                    'routes' => ['employees.*']
+                    'routes' => ['employees.*'],
+                    'capability' => 'employees',
                 ],
                 [
                     'name' => 'Laporan',
                     'path' => '/reports',
                     'icon' => 'report',
-                    'routes' => ['reports.*']
+                    'routes' => ['reports.*'],
+                    'capability' => 'reports',
                 ],
             ]
         ],
     ];
+    
+    // Filter menu items based on user capabilities
+    $filteredMenuGroups = [];
+    foreach ($menuGroups as $group) {
+        $filteredItems = array_filter($group['items'], function ($item) use ($userCapabilities) {
+            return in_array($item['capability'], $userCapabilities);
+        });
+        
+        if (!empty($filteredItems)) {
+            $filteredMenuGroups[] = [
+                'title' => $group['title'],
+                'items' => array_values($filteredItems),
+            ];
+        }
+    }
     
     // Icon SVGs
     $icons = [
@@ -140,7 +169,7 @@
     <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav class="mb-6">
             <div class="flex flex-col gap-4">
-                @foreach ($menuGroups as $groupIndex => $menuGroup)
+                @foreach ($filteredMenuGroups as $groupIndex => $menuGroup)
                     <div>
                         <!-- Menu Group Title -->
                         <h2 class="mb-4 text-xs uppercase flex leading-[20px] text-gray-400 font-medium"
@@ -185,6 +214,24 @@
                 @endforeach
             </div>
         </nav>
+
+        <!-- User Capabilities Info (for debugging/transparency) -->
+        <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" 
+            x-transition 
+            class="mb-4">
+            @if($outlet)
+                <div class="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">
+                            {{ $user->displayRoleAt($outlet) }}
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ count($userCapabilities) }} akses aktif
+                    </p>
+                </div>
+            @endif
+        </div>
 
         <!-- Sidebar Widget (Outlet Switcher) -->
         <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" 
