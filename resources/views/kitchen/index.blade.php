@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="kitchenDisplay" x-init="init">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +13,11 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <!-- Hidden audio element -->
+    <audio id="notificationSound" preload="auto">
+        <source src="{{ asset('sounds/notification.mp3') }}" type="audio/mpeg">
+    </audio>
 </head>
 <body class="bg-gray-100 font-sans antialiased text-gray-900">
     <div class="min-h-screen flex flex-col">
@@ -28,10 +33,33 @@
                 <span class="bg-primary-100 text-primary-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
                     {{ $orders->count() }} Pesanan Aktif
                 </span>
+
+                <!-- New Order Notification Badge -->
+                <span 
+                    x-show="newOrdersCount > 0"
+                    x-transition
+                    class="bg-accent-500 text-white text-sm font-bold px-3 py-1 rounded-full animate-bounce">
+                    +<span x-text="newOrdersCount"></span> Baru!
+                </span>
             </div>
             
             <div class="flex items-center gap-4">
+                <!-- Sound Toggle -->
+                <button 
+                    @click="toggleSound"
+                    :class="soundEnabled ? 'bg-secondary-100 text-secondary-700' : 'bg-gray-100 text-gray-500'"
+                    class="px-3 py-2 rounded-lg font-medium flex items-center gap-2 hover:opacity-80 transition-all">
+                    <svg x-show="soundEnabled" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.586A2 2 0 014 14V10a2 2 0 011-1.732l7-3.5a1 1 0 011.5.866v13.732a1 1 0 01-1.5.866l-7-3.5z"/>
+                    </svg>
+                    <svg x-show="!soundEnabled" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15.586A2 2 0 014 14V10a2 2 0 011-1.732l7-3.5a1 1 0 011.5.866v13.732a1 1 0 01-1.5.866l-7-3.5zM17 12h6"/>
+                    </svg>
+                    <span x-text="soundEnabled ? 'Suara: ON' : 'Suara: OFF'"></span>
+                </button>
+
                 <div id="clock" class="text-xl font-mono text-gray-600 font-bold"></div>
+                
                 <button onclick="window.location.reload()" class="btn-secondary flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -71,19 +99,107 @@
     </div>
 
     <script>
+        // Alpine.js Component for Kitchen Display
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('kitchenDisplay', () => ({
+                soundEnabled: localStorage.getItem('kitchen_sound') !== 'false',
+                lastOrderId: {{ $orders->max('id') ?? 0 }},
+                newOrdersCount: 0,
+                checkInterval: null,
+                hasInteracted: false,
+
+                init() {
+                    // Start polling for new orders
+                    this.checkInterval = setInterval(() => {
+                        this.checkNewOrders();
+                    }, 5000); // Check every 5 seconds
+
+                    // Mark as interacted after first click anywhere
+                    document.body.addEventListener('click', () => {
+                        this.hasInteracted = true;
+                    }, { once: true });
+                },
+
+                async checkNewOrders() {
+                    try {
+                        const response = await fetch(`{{ route('kitchen.check-new') }}?last_order_id=${this.lastOrderId}`);
+                        const data = await response.json();
+
+                        if (data.has_new_orders) {
+                            this.newOrdersCount = data.new_orders_count;
+                            this.lastOrderId = data.latest_order_id;
+
+                            // Play notification sound
+                            if (this.soundEnabled && this.hasInteracted) {
+                                this.playNotificationSound();
+                            }
+
+                            // Show browser notification
+                            this.showBrowserNotification(data.new_orders);
+
+                            // Auto reload after 2 seconds to show new orders
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        }
+                    } catch (error) {
+                        console.error('Error checking new orders:', error);
+                    }
+                },
+
+                playNotificationSound() {
+                    const audio = document.getElementById('notificationSound');
+                    if (audio) {
+                        audio.play().catch(err => {
+                            console.log('Could not play sound:', err);
+                        });
+                    }
+                },
+
+                showBrowserNotification(orders) {
+                    if ("Notification" in window && Notification.permission === "granted") {
+                        const order = orders[0];
+                        new Notification("Pesanan Baru Masuk!", {
+                            body: `Order #${order.order_number} dari ${order.table}\n${order.items_count} item`,
+                            icon: '/favicon.ico',
+                            badge: '/favicon.ico'
+                        });
+                    }
+                },
+
+                toggleSound() {
+                    this.soundEnabled = !this.soundEnabled;
+                    localStorage.setItem('kitchen_sound', this.soundEnabled ? 'true' : 'false');
+
+                    // Test sound when enabling
+                    if (this.soundEnabled) {
+                        this.hasInteracted = true;
+                        this.playNotificationSound();
+                    }
+                },
+
+                destroy() {
+                    if (this.checkInterval) {
+                        clearInterval(this.checkInterval);
+                    }
+                }
+            }));
+        });
+
         // Update Clock
         function updateClock() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('clock').textContent = timeString;
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const clockEl = document.getElementById('clock');
+            if (clockEl) clockEl.textContent = timeString;
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Auto Refresh every 30 seconds
-        setInterval(() => {
-            window.location.reload();
-        }, 30000);
+        // Request notification permission on load
+        if ("Notification" in window && Notification.permission === "default") {
+            Notification.requestPermission();
+        }
     </script>
 </body>
 </html>

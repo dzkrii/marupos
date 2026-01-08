@@ -205,14 +205,60 @@ class TableController extends Controller
     {
         $this->authorizeOutlet($table);
 
+        $outlet = Auth::user()->currentOutlet;
+        $qrUrl = route('qr.menu', [$outlet->slug, $table->qr_code]);
+
         $qrCode = QrCode::format('png')
             ->size(400)
             ->margin(2)
-            ->generate($table->qr_code);
+            ->generate($qrUrl);
 
         return response($qrCode)
             ->header('Content-Type', 'image/png')
             ->header('Content-Disposition', "attachment; filename=\"qr-meja-{$table->number}.png\"");
+    }
+
+    /**
+     * Download all QR codes as ZIP.
+     */
+    public function downloadAllQrs()
+    {
+        $outlet = Auth::user()->currentOutlet;
+        $tables = Table::where('outlet_id', $outlet->id)
+            ->where('is_active', true)
+            ->orderBy('number')
+            ->get();
+
+        if ($tables->isEmpty()) {
+            return back()->with('error', 'Tidak ada meja untuk diunduh.');
+        }
+
+        $zip = new \ZipArchive();
+        $zipFileName = 'qr-codes-' . $outlet->slug . '-' . now()->format('YmdHis') . '.zip';
+        $zipPath = storage_path('app/temp/' . $zipFileName);
+
+        // Create temp directory if not exists
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            foreach ($tables as $table) {
+                $qrUrl = route('qr.menu', [$outlet->slug, $table->qr_code]);
+                $qrCode = QrCode::format('png')
+                    ->size(400)
+                    ->margin(2)
+                    ->generate($qrUrl);
+
+                $fileName = "meja-{$table->number}.png";
+                $zip->addFromString($fileName, $qrCode);
+            }
+            $zip->close();
+
+            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+        }
+
+        return back()->with('error', 'Gagal membuat file ZIP.');
     }
 
     /**
@@ -236,12 +282,12 @@ class TableController extends Controller
     }
 
     /**
-     * Generate QR code URL for ordering.
+     * Generate unique QR code string for table.
      */
     private function generateQrUrl($outlet, string $tableNumber): string
     {
-        // Using single domain format (best practice for SaaS)
-        return config('app.url') . '/' . $outlet->slug . '/order/' . $tableNumber;
+        // Generate unique random string for security
+        return strtoupper($tableNumber) . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
     }
 
     /**

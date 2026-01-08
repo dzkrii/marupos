@@ -94,6 +94,49 @@ class KitchenController extends Controller
     }
 
     /**
+     * Get new orders count (API endpoint for notification polling).
+     */
+    public function checkNewOrders(Request $request)
+    {
+        $outlet = $request->user()->current_outlet;
+        
+        if (!$outlet) {
+            return response()->json(['error' => 'No outlet selected'], 403);
+        }
+
+        // Get last seen order ID from session or param
+        $lastSeenOrderId = $request->input('last_order_id', session('kitchen_last_order_id', 0));
+
+        // Get orders that are newer than last seen
+        $newOrders = Order::where('outlet_id', $outlet->id)
+            ->whereIn('status', [Order::STATUS_CONFIRMED, Order::STATUS_PREPARING])
+            ->where('id', '>', $lastSeenOrderId)
+            ->with(['items', 'table'])
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $hasNewOrders = $newOrders->isNotEmpty();
+        $latestOrderId = Order::where('outlet_id', $outlet->id)
+            ->whereIn('status', [Order::STATUS_CONFIRMED, Order::STATUS_PREPARING])
+            ->max('id') ?? 0;
+
+        return response()->json([
+            'has_new_orders' => $hasNewOrders,
+            'new_orders_count' => $newOrders->count(),
+            'latest_order_id' => $latestOrderId,
+            'new_orders' => $newOrders->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'table' => $order->table ? $order->table->name : 'Takeaway',
+                    'items_count' => $order->items->count(),
+                    'order_type' => $order->order_type,
+                ];
+            })
+        ]);
+    }
+
+    /**
      * Sync Order status based on its items.
      */
     protected function syncOrderStatus(Order $order)
