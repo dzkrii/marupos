@@ -46,9 +46,9 @@
                     </div>
 
                     <!-- PIN -->
-                    <div>
+                    <!-- <div>
                         <x-ui.input name="pin" label="PIN (6 Digit)" placeholder="123456" hint="Untuk login cepat di kasir (opsional)" maxlength="6" />
-                    </div>
+                    </div> -->
 
                     <!-- Avatar -->
                     <div class="md:col-span-2">

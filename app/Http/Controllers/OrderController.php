@@ -212,6 +212,7 @@ class OrderController extends Controller
 
         $query = Order::where('outlet_id', $outletId)
             ->with(['table', 'items', 'user', 'payments'])
+            ->where('status', '!=', Order::STATUS_CANCELLED)
             ->latest();
 
         // Search by table number
@@ -226,33 +227,56 @@ class OrderController extends Controller
         $date = $request->filled('date') ? $request->date : today()->format('Y-m-d');
         $query->whereDate('created_at', $date);
 
-        // Payment status filter
+        // Payment status filter based on actual payment records
         $paymentFilter = $request->get('payment', 'unpaid');
         
         if ($paymentFilter === 'unpaid') {
-            $query->whereNotIn('status', [Order::STATUS_CANCELLED, Order::STATUS_COMPLETED]);
+            // Orders where total payments < total_amount
+            $query->where(function($q) {
+                $q->whereDoesntHave('payments', function($pq) {
+                    $pq->where('status', 'completed');
+                })
+                ->orWhereRaw('(SELECT COALESCE(SUM(amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.status = ?) < orders.total_amount', ['completed']);
+            });
         } elseif ($paymentFilter === 'paid') {
-            $query->where('status', Order::STATUS_COMPLETED);
+            // Orders where total payments >= total_amount
+            $query->whereHas('payments', function($pq) {
+                $pq->where('status', 'completed');
+            })
+            ->whereRaw('(SELECT COALESCE(SUM(amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.status = ?) >= orders.total_amount', ['completed']);
         }
         // 'all' shows everything
 
         $orders = $query->paginate(20)->appends($request->query());
 
-        // Statistics
+        // Statistics - based on actual payment records
         $unpaidCount = Order::where('outlet_id', $outletId)
             ->whereDate('created_at', today())
             ->where('status', '!=', Order::STATUS_CANCELLED)
-            ->where('status', '!=', Order::STATUS_COMPLETED)
+            ->where(function($q) {
+                $q->whereDoesntHave('payments', function($pq) {
+                    $pq->where('status', 'completed');
+                })
+                ->orWhereRaw('(SELECT COALESCE(SUM(amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.status = ?) < orders.total_amount', ['completed']);
+            })
             ->count();
 
         $paidTodayCount = Order::where('outlet_id', $outletId)
             ->whereDate('created_at', today())
-            ->where('status', Order::STATUS_COMPLETED)
+            ->where('status', '!=', Order::STATUS_CANCELLED)
+            ->whereHas('payments', function($pq) {
+                $pq->where('status', 'completed');
+            })
+            ->whereRaw('(SELECT COALESCE(SUM(amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.status = ?) >= orders.total_amount', ['completed'])
             ->count();
 
         $todayRevenue = Order::where('outlet_id', $outletId)
             ->whereDate('created_at', today())
-            ->where('status', Order::STATUS_COMPLETED)
+            ->where('status', '!=', Order::STATUS_CANCELLED)
+            ->whereHas('payments', function($pq) {
+                $pq->where('status', 'completed');
+            })
+            ->whereRaw('(SELECT COALESCE(SUM(amount), 0) FROM payments WHERE payments.order_id = orders.id AND payments.status = ?) >= orders.total_amount', ['completed'])
             ->sum('total_amount');
 
         return view('orders.cashier', compact(
@@ -262,6 +286,7 @@ class OrderController extends Controller
             'todayRevenue'
         ));
     }
+
 
     /**
      * Show the form for creating a new order - Table selection.
