@@ -1,208 +1,254 @@
 <x-layouts.guest-qr>
     <x-slot name="title">{{ $outlet->name }} - Menu</x-slot>
 
-    <div class="min-h-screen pb-24" x-data="qrMenu">
+    <div class="min-h-screen bg-gray-50 pb-24 dark:bg-gray-900" x-data="qrMenu">
         <!-- Header -->
-        <div class="sticky top-0 z-30 bg-white border-b border-neutral-200 shadow-sm">
-            <div class="px-4 py-4">
+        <header class="sticky top-0 z-30 border-b border-gray-200 bg-white/80 backdrop-blur-md shadow-theme-xs dark:border-gray-800 dark:bg-gray-900/80">
+            <div class="mx-auto max-w-lg px-4 py-4">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-xl font-bold text-neutral-900">{{ $outlet->name }}</h1>
-                        <p class="text-sm text-neutral-600">
-                            <span class="inline-flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        <h1 class="text-lg font-bold text-gray-900 dark:text-white">{{ $outlet->name }}</h1>
+                        <div class="mt-1 flex items-center gap-2">
+                            <span class="inline-flex items-center text-sm font-medium text-brand-600 dark:text-brand-400">
+                                <svg class="mr-1.5 size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
-                                Meja {{ $table->name }}
+                                Meja {{ $table->number }}
                             </span>
                             @if($table->area)
-                                <span class="ml-2 text-neutral-400">{{ $table->area->name }}</span>
+                                <span class="text-xs text-gray-400">•</span>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">{{ $table->area->name }}</span>
                             @endif
-                        </p>
+                        </div>
                     </div>
+                    
+                    <!-- Search/Filter Trigger (Optional Future Feature) -->
+                    {{-- <button class="rounded-full bg-gray-100 p-2 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300">
+                        <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button> --}}
                 </div>
             </div>
 
             <!-- Category Filter -->
-            <div class="px-4 pb-3 overflow-x-auto">
+            <div class="no-scrollbar overflow-x-auto px-4 pb-3">
                 <div class="flex space-x-2">
                     <button 
                         @click="selectedCategory = null"
-                        :class="selectedCategory === null ? 'bg-primary-500 text-white' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'"
-                        class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
+                        :class="selectedCategory === null ? 'bg-brand-500 text-white shadow-theme-xs' : 'bg-white text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'"
+                        class="rounded-full px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-all border border-transparent"
+                        :class="selectedCategory !== null && 'border-gray-200 dark:border-gray-700'">
                         Semua
                     </button>
                     @foreach($categories as $category)
                         <button 
                             @click="selectedCategory = {{ $category->id }}"
-                            :class="selectedCategory === {{ $category->id }} ? 'bg-primary-500 text-white' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'"
-                            class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors">
+                            :class="selectedCategory === {{ $category->id }} ? 'bg-brand-500 text-white shadow-theme-xs' : 'bg-white text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'"
+                            class="rounded-full px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-all border border-transparent"
+                            :class="selectedCategory !== {{ $category->id }} && 'border-gray-200 dark:border-gray-700'">
                             {{ $category->name }}
                         </button>
                     @endforeach
                 </div>
             </div>
-        </div>
+        </header>
 
         <!-- Menu Items Grid -->
-        <div class="px-4 py-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <main class="mx-auto max-w-lg px-4 py-6">
+            <div class="space-y-4">
                 @foreach($menuItems as $item)
                     <div 
                         x-show="selectedCategory === null || selectedCategory === {{ $item->menu_category_id }}"
-                        x-transition
-                        class="card overflow-hidden hover:shadow-md transition-shadow">
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        class="group flex overflow-hidden rounded-xl bg-white shadow-theme-sm dark:bg-gray-800">
                         
-                        @if($item->image)
-                            <img 
-                                src="{{ Storage::url($item->image) }}" 
-                                alt="{{ $item->name }}"
-                                class="w-full h-40 object-cover">
-                        @else
-                            <div class="w-full h-40 bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center">
-                                <svg class="w-16 h-16 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
+                        <div class="flex-1 p-4">
+                            <div class="mb-1 flex items-start justify-between">
+                                <h3 class="font-semibold text-gray-900 line-clamp-2 dark:text-white">{{ $item->name }}</h3>
                             </div>
-                        @endif
-
-                        <div class="p-4">
-                            <div class="flex items-start justify-between mb-2">
-                                <div class="flex-1">
-                                    <h3 class="font-semibold text-neutral-900">{{ $item->name }}</h3>
-                                    <p class="text-xs text-neutral-500 mt-1">{{ $item->category->name }}</p>
-                                </div>
-                                @if(!$item->is_available || !$item->isInStock())
-                                    <span class="badge-warning text-xs">Habis</span>
-                                @endif
-                            </div>
-
+                            
+                            <p class="mb-3 text-xs text-brand-600 font-medium dark:text-brand-400">{{ $item->category->name }}</p>
+                            
                             @if($item->description)
-                                <p class="text-sm text-neutral-600 mb-3 line-clamp-2">{{ $item->description }}</p>
+                                <p class="mb-4 text-sm text-gray-500 line-clamp-2 dark:text-gray-400">{{ $item->description }}</p>
+                            @else
+                                <div class="mb-4 h-5"></div> {{-- Spacer --}}
                             @endif
 
                             <div class="flex items-center justify-between">
-                                <span class="text-lg font-bold text-primary-600">
+                                <span class="text-lg font-bold text-gray-900 dark:text-white">
                                     Rp {{ number_format($item->price, 0, ',', '.') }}
                                 </span>
 
                                 @if($item->is_available && $item->isInStock())
                                     <button 
                                         @click="openAddModal({{ $item->id }}, '{{ $item->name }}', {{ $item->price }})"
-                                        class="btn-primary text-sm py-2 px-3">
-                                        <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="flex items-center justify-center rounded-lg bg-brand-50 px-3 py-2 text-sm font-semibold text-brand-600 transition-colors hover:bg-brand-100 active:bg-brand-200 dark:bg-brand-500/10 dark:text-brand-400 dark:hover:bg-brand-500/20">
+                                        <svg class="mr-1.5 size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                         </svg>
                                         Tambah
                                     </button>
                                 @else
-                                    <button disabled class="px-3 py-2 bg-neutral-200 text-neutral-500 rounded-lg text-sm cursor-not-allowed">
-                                        Tidak Tersedia
-                                    </button>
+                                    <span class="rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+                                        Habis
+                                    </span>
                                 @endif
                             </div>
+                        </div>
+
+                        <!-- Image on the right for mobile friendliness -->
+                        <div class="w-32 bg-gray-100 shrink-0 relative">
+                            @if($item->image)
+                                <img 
+                                    src="{{ Storage::url($item->image) }}" 
+                                    alt="{{ $item->name }}"
+                                    class="absolute inset-0 size-full object-cover">
+                            @else
+                                <div class="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-300 dark:bg-gray-700 dark:text-gray-500">
+                                    <svg class="size-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endforeach
             </div>
 
             @if($menuItems->isEmpty())
-                <div class="text-center py-12">
-                    <svg class="w-16 h-16 mx-auto text-neutral-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6M9 21H3"/>
-                    </svg>
-                    <p class="text-neutral-500">Belum ada menu tersedia</p>
+                <div class="flex flex-col items-center justify-center py-16 text-center">
+                    <div class="mb-4 flex size-16 items-center justify-center rounded-full bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600">
+                        <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Menu Belum Tersedia</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Silakan hubungi pelayan untuk bantuan.</p>
                 </div>
             @endif
-        </div>
+        </main>
 
         <!-- Floating Cart Button -->
-        <div class="fixed bottom-0 left-0 right-0 z-40 p-4 bg-gradient-to-t from-white via-white to-transparent">
+        <div class="fixed bottom-0 left-0 right-0 z-40 mx-auto max-w-lg p-4">
             <button 
                 @click="window.location.href = '{{ route('qr.cart.view') }}'"
                 x-show="cartCount > 0"
-                x-transition
-                class="w-full btn-primary py-4 text-lg font-semibold shadow-lg relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 bg-white text-primary-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm" x-text="cartCount"></span>
-                Lihat Keranjang
-                <svg class="w-6 h-6 inline ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                </svg>
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-full"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                class="relative flex w-full items-center justify-between rounded-xl bg-gray-900 p-4 text-white shadow-theme-lg shadow-gray-900/20 active:scale-[0.98] transition-transform dark:bg-brand-600 dark:text-white dark:shadow-brand-500/20">
+                <div class="flex items-center gap-3">
+                    <span class="flex size-8 items-center justify-center rounded-full bg-white/20 text-sm font-bold" x-text="cartCount"></span>
+                    <span class="font-semibold">Lihat Pesanan</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="mr-2 text-sm text-white/80">Total</span>
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
             </button>
         </div>
 
         <!-- Add to Cart Modal -->
         <div 
             x-show="showAddModal"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-50 overflow-y-auto"
+            class="relative z-50"
+            role="dialog"
+            aria-modal="true"
             style="display: none;">
             
-            <div class="flex items-end sm:items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-                <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" @click="closeAddModal"></div>
+            <div 
+                x-show="showAddModal"
+                x-transition:enter="ease-out duration-300"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 bg-gray-500/75 transition-opacity backdrop-blur-sm dark:bg-gray-900/80" 
+                @click="closeAddModal"></div>
 
-                <div 
-                    x-transition:enter="transition ease-out duration-300 transform"
-                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave="transition ease-in duration-200 transform"
-                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-                    
-                    <div>
-                        <h3 class="text-lg font-semibold text-neutral-900 mb-4" x-text="modalItem.name"></h3>
+            <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                <div class="flex min-h-full items-end justify-center p-0 text-center sm:items-center sm:p-0">
+                    <div 
+                        x-show="showAddModal"
+                        x-transition:enter="ease-out duration-300"
+                        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                        x-transition:leave="ease-in duration-200"
+                        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                        class="relative transform overflow-hidden rounded-t-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:rounded-2xl dark:bg-gray-800">
                         
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Jumlah</label>
-                            <div class="flex items-center space-x-3">
-                                <button 
-                                    @click="if(modalItem.quantity > 1) modalItem.quantity--"
-                                    class="w-10 h-10 rounded-lg bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center text-neutral-700 font-semibold">
-                                    -
+                        <!-- Modal Handle for Mobile -->
+                        <div class="flex justify-center pt-3 sm:hidden">
+                            <div class="h-1.5 w-12 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        </div>
+
+                        <div class="px-4 pb-4 pt-4 sm:p-6 sm:pb-4">
+                            <div class="mb-5 flex items-start justify-between">
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white" x-text="modalItem.name"></h3>
+                                    <p class="mt-1 text-sm font-medium text-brand-600 dark:text-brand-400" x-text="formatPrice(modalItem.price) + ' / porsi'"></p>
+                                </div>
+                                <button @click="closeAddModal" class="rounded-full bg-gray-100 p-2 text-gray-500 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600">
+                                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
                                 </button>
-                                <input 
-                                    type="number" 
-                                    x-model="modalItem.quantity"
-                                    min="1"
-                                    class="w-20 text-center border border-neutral-300 rounded-lg py-2 font-semibold">
-                                <button 
-                                    @click="modalItem.quantity++"
-                                    class="w-10 h-10 rounded-lg bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center text-neutral-700 font-semibold">
-                                    +
-                                </button>
+                            </div>
+
+                            <div class="space-y-4">
+                                <!-- Quantity -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Jumlah Pesanan</label>
+                                    <div class="flex items-center justify-between rounded-xl border border-gray-200 p-1 dark:border-gray-700">
+                                        <button 
+                                            @click="if(modalItem.quantity > 1) modalItem.quantity--"
+                                            class="flex size-10 items-center justify-center rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                            </svg>
+                                        </button>
+                                        <input 
+                                            type="number" 
+                                            x-model="modalItem.quantity"
+                                            min="1"
+                                            class="w-16 border-none bg-transparent text-center text-lg font-bold text-gray-900 focus:ring-0 dark:text-white">
+                                        <button 
+                                            @click="modalItem.quantity++"
+                                            class="flex size-10 items-center justify-center rounded-lg bg-brand-50 text-brand-600 hover:bg-brand-100 dark:bg-brand-500/20 dark:text-brand-400 dark:hover:bg-brand-500/30">
+                                            <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Notes -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Catatan Khusus (Opsional)</label>
+                                    <textarea 
+                                        x-model="modalItem.notes"
+                                        rows="3"
+                                        placeholder="Contoh: Jangan terlalu pedas, kuah dipisah..."
+                                        class="w-full rounded-xl border-gray-200 text-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"></textarea>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Catatan (Opsional)</label>
-                            <textarea 
-                                x-model="modalItem.notes"
-                                rows="3"
-                                placeholder="Contoh: Tidak pedas, tanpa bawang"
-                                class="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"></textarea>
-                        </div>
-
-                        <div class="flex items-center justify-between mb-4 p-3 bg-neutral-50 rounded-lg">
-                            <span class="text-neutral-700">Subtotal</span>
-                            <span class="text-xl font-bold text-primary-600" x-text="formatPrice(modalItem.price * modalItem.quantity)"></span>
-                        </div>
-
-                        <div class="flex space-x-3">
+                        <div class="border-t border-gray-100 bg-gray-50 px-4 py-4 sm:flex sm:flex-row-reverse sm:px-6 dark:border-gray-700 dark:bg-gray-800/50">
                             <button 
-                                @click="closeAddModal"
-                                class="flex-1 px-4 py-3 border border-neutral-300 rounded-lg text-neutral-700 font-medium hover:bg-neutral-50 transition-colors">
-                                Batal
-                            </button>
-                            <button 
+                                type="button" 
                                 @click="addToCart"
-                                class="flex-1 btn-primary py-3">
-                                Tambah ke Keranjang
+                                class="inline-flex w-full items-center justify-center rounded-xl bg-brand-600 px-3 py-3.5 text-sm font-semibold text-white shadow-theme-sm transition-all hover:bg-brand-700 active:scale-[0.98] sm:ml-3 sm:w-auto">
+                                <span class="mr-2">Tambah ke Pesanan</span> • 
+                                <span class="ml-2" x-text="formatPrice(modalItem.price * modalItem.quantity)"></span>
                             </button>
                         </div>
                     </div>
@@ -234,17 +280,22 @@
                         notes: ''
                     };
                     this.showAddModal = true;
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
                 },
 
                 closeAddModal() {
                     this.showAddModal = false;
-                    this.modalItem = {
-                        id: null,
-                        name: '',
-                        price: 0,
-                        quantity: 1,
-                        notes: ''
-                    };
+                    document.body.style.overflow = ''; // Restore scrolling
+                    // Reset after animation
+                    setTimeout(() => {
+                        this.modalItem = {
+                            id: null,
+                            name: '',
+                            price: 0,
+                            quantity: 1,
+                            notes: ''
+                        };
+                    }, 300);
                 },
 
                 async addToCart() {
@@ -268,8 +319,12 @@
                             this.cartCount = data.cart_count;
                             this.closeAddModal();
                             
-                            // Show success toast (simple alert for now)
-                            alert('✓ Item berhasil ditambahkan ke keranjang!');
+                            // Replace alert with a better notification if possible, but for now specific styling in alert is hard
+                            // We can use a custom toast in future, but standard alert is consistent with previous code
+                            // Or better: Create a temporary toast using Alpine?
+                            // For this iteration, let's keep it simple or user might get confused if we add too much custom JS logic without asking.
+                            // But I will trigger a simple browser vibration if possible.
+                            if(navigator.vibrate) navigator.vibrate(50);
                         } else {
                             alert('✗ ' + data.message);
                         }
