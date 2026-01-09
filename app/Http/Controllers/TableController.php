@@ -208,14 +208,14 @@ class TableController extends Controller
         $outlet = Auth::user()->currentOutlet;
         $qrUrl = route('qr.menu', [$outlet->slug, $table->qr_code]);
 
-        $qrCode = QrCode::format('png')
+        $qrCode = QrCode::format('svg')
             ->size(400)
             ->margin(2)
             ->generate($qrUrl);
 
         return response($qrCode)
-            ->header('Content-Type', 'image/png')
-            ->header('Content-Disposition', "attachment; filename=\"qr-meja-{$table->number}.png\"");
+            ->header('Content-Type', 'image/svg+xml')
+            ->header('Content-Disposition', "attachment; filename=\"qr-meja-{$table->number}.svg\"");
     }
 
     /**
@@ -245,12 +245,12 @@ class TableController extends Controller
         if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
             foreach ($tables as $table) {
                 $qrUrl = route('qr.menu', [$outlet->slug, $table->qr_code]);
-                $qrCode = QrCode::format('png')
+                $qrCode = QrCode::format('svg')
                     ->size(400)
                     ->margin(2)
                     ->generate($qrUrl);
 
-                $fileName = "meja-{$table->number}.png";
+                $fileName = "meja-{$table->number}.svg";
                 $zip->addFromString($fileName, $qrCode);
             }
             $zip->close();
