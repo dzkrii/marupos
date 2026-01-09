@@ -24,6 +24,11 @@ class QrOrderController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
+        // Check if QR access code is required
+        if ($outlet->qr_access_code && Session::get('qr_access_code_' . $outlet->id) !== $outlet->qr_access_code) {
+            return redirect()->route('qr.login', [$outletSlug, $tableQr]);
+        }
+
         // Find table by QR code
         $table = Table::where('outlet_id', $outlet->id)
             ->where('qr_code', $tableQr)
@@ -58,6 +63,36 @@ class QrOrderController extends Controller
         }
 
         return view('qr.menu', compact('outlet', 'table', 'categories', 'menuItems'));
+    }
+
+    /**
+     * Show login page for QR access.
+     */
+    public function login($outletSlug, $tableQr)
+    {
+        $outlet = Outlet::where('slug', $outletSlug)->firstOrFail();
+        return view('qr.login', compact('outlet', 'outletSlug', 'tableQr'));
+    }
+
+    /**
+     * Verify QR access code.
+     */
+    public function verify(Request $request, $outletSlug, $tableQr)
+    {
+        $request->validate([
+            'access_code' => 'required|string',
+        ]);
+
+        $outlet = Outlet::where('slug', $outletSlug)->firstOrFail();
+
+        if ($request->access_code !== $outlet->qr_access_code) {
+            return back()->with('error', 'Kode akses salah. Silakan coba lagi.');
+        }
+
+        // Store access in session
+        Session::put('qr_access_code_' . $outlet->id, $outlet->qr_access_code);
+
+        return redirect()->route('qr.menu', [$outletSlug, $tableQr]);
     }
 
     /**

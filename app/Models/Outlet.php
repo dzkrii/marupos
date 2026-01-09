@@ -19,6 +19,7 @@ class Outlet extends Model
         'slug',
         'code',
         'phone',
+        'qr_access_code',
         'address',
         'city',
         'timezone',

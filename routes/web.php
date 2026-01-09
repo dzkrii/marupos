@@ -54,6 +54,7 @@ Route::middleware(['auth', 'verified', 'outlet.access'])->group(function () {
     
     // Dashboard - accessible by all authenticated users with outlet access
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/outlets/regenerate-access-code', [\App\Http\Controllers\OutletController::class, 'regenerateAccessCode'])->name('outlets.regenerate-access-code');
 
     /*
     |--------------------------------------------------------------------------
@@ -187,6 +188,8 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('order')->name('qr.')->group(function () {
+    Route::get('/{outletSlug}/{tableQr}/login', [\App\Http\Controllers\QrOrderController::class, 'login'])->name('login');
+    Route::post('/{outletSlug}/{tableQr}/verify', [\App\Http\Controllers\QrOrderController::class, 'verify'])->name('verify');
     Route::get('/{outletSlug}/{tableQr}', [\App\Http\Controllers\QrOrderController::class, 'menu'])->name('menu');
     Route::post('/cart/add', [\App\Http\Controllers\QrOrderController::class, 'addToCart'])->name('cart.add');
     Route::patch('/cart/update', [\App\Http\Controllers\QrOrderController::class, 'updateCart'])->name('cart.update');

@@ -40,6 +40,7 @@ class DashboardController extends Controller
         if ($outlet) {
             $stats['total_menu'] = MenuItem::where('outlet_id', $outlet->id)->count();
             $stats['total_categories'] = MenuCategory::where('outlet_id', $outlet->id)->count();
+            $stats['qr_access_code'] = $outlet->qr_access_code;
             $stats['total_tables'] = Table::where('outlet_id', $outlet->id)->count();
             $stats['available_tables'] = Table::where('outlet_id', $outlet->id)->where('status', Table::STATUS_AVAILABLE)->count();
             $stats['occupied_tables'] = Table::where('outlet_id', $outlet->id)->where('status', Table::STATUS_OCCUPIED)->count();
