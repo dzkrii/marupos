@@ -112,7 +112,7 @@ class TableController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return view('tables.edit', compact('table', 'areas'));
+        return view('tables.edit', compact('table', 'areas', 'outlet'));
     }
 
     /**

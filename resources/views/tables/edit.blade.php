@@ -71,7 +71,13 @@
                     <!-- QR Code -->
                     <div class="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900">
                         <label class="mb-3 block text-sm font-medium text-gray-700 dark:text-gray-400">QR Code URL</label>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 break-all mb-4">{{ $table->qr_code }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 break-all mb-4">Code: {{ $table->qr_code }}</p>
+                        
+                        <div class="mb-4">
+                             <a href="{{ route('qr.menu', [$outlet->slug, $table->qr_code]) }}" target="_blank" class="text-sm font-medium text-brand-600 hover:text-brand-500 hover:underline dark:text-brand-400">
+                                {{ route('qr.menu', [$outlet->slug, $table->qr_code]) }}
+                            </a>
+                        </div>
                         <div class="flex flex-wrap gap-2">
                             <x-ui.button href="{{ route('tables.download-qr', $table) }}" variant="secondary" size="sm">
                                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
