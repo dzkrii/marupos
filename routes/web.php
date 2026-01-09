@@ -99,6 +99,11 @@ Route::middleware(['auth', 'verified', 'outlet.access'])->group(function () {
         Route::get('orders/create/menu/{table}', [OrderController::class, 'selectMenu'])->name('orders.select-menu.table');
         Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
         
+        // Edit/Add items to existing orders
+        Route::get('orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
+        Route::put('orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+        Route::delete('orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+        
         // Payments
         Route::get('orders/{order}/payment', [PaymentController::class, 'create'])->name('payments.create');
         Route::post('orders/{order}/payment', [PaymentController::class, 'store'])->name('payments.store');
