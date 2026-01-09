@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CapabilityMiddleware;
 use App\Http\Middleware\EnsureOutletAccess;
 use App\Http\Middleware\RoleMiddleware;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Register middleware aliases
         $middleware->alias([
+            'admin' => AdminMiddleware::class,
             'role' => RoleMiddleware::class, // Deprecated, use capability instead
             'capability' => CapabilityMiddleware::class,
             'outlet.access' => EnsureOutletAccess::class,

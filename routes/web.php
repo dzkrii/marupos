@@ -199,4 +199,22 @@ Route::prefix('order')->name('qr.')->group(function () {
     Route::get('/status/{orderNumber}', [\App\Http\Controllers\QrOrderController::class, 'getOrderStatus'])->name('status');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Admin Routes (Super Admin Only)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    // Admin Dashboard
+    Route::get('/', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+    
+    // Companies Management
+    Route::get('/companies', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'companies'])->name('companies.index');
+    Route::get('/companies/{company}', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'showCompany'])->name('companies.show');
+    
+    // Subscriptions Management
+    Route::get('/subscriptions', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'subscriptions'])->name('subscriptions.index');
+});
+
 require __DIR__.'/auth.php';
+

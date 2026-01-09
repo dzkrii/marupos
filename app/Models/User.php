@@ -28,6 +28,7 @@ class User extends Authenticatable
         'avatar',
         'pin',
         'is_active',
+        'is_admin',
         'password',
     ];
 
@@ -53,6 +54,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'is_admin' => 'boolean',
         ];
     }
 

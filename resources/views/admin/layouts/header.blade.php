@@ -41,8 +41,11 @@
             </button>
 
             <!-- Logo (mobile only) -->
-            <a href="{{ route('dashboard') }}" class="xl:hidden">
+            <a href="{{ route('admin.dashboard') }}" class="xl:hidden flex items-center gap-2">
                 <img class="h-8 w-auto dark:brightness-0 dark:invert" src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen" />
+                <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-error-100 text-error-600 dark:bg-error-500/20 dark:text-error-400">
+                    Admin
+                </span>
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->
@@ -56,7 +59,10 @@
             </button>
 
             <!-- Page Title (desktop only) -->
-            <div class="hidden xl:block">
+            <div class="hidden xl:flex xl:items-center xl:gap-3">
+                <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-error-100 text-error-600 dark:bg-error-500/20 dark:text-error-400">
+                    Admin Panel
+                </span>
                 <h1 class="text-lg font-semibold text-gray-800 dark:text-white/90">
                     {{ $title ?? 'Dashboard' }}
                 </h1>
@@ -85,57 +91,17 @@
                             fill="currentColor" />
                     </svg>
                 </button>
-
-                <!-- Notification Dropdown -->
-                <div class="relative" x-data="{ isOpen: false }">
-                    <button 
-                        @click="isOpen = !isOpen"
-                        class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
-                        <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                        </svg>
-                        <!-- Notification badge -->
-                        <span class="absolute top-0.5 right-0.5 flex h-2.5 w-2.5">
-                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-error-400 opacity-75"></span>
-                            <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-error-500"></span>
-                        </span>
-                    </button>
-                    
-                    <!-- Dropdown -->
-                    <div x-show="isOpen" 
-                        @click.away="isOpen = false"
-                        x-transition
-                        class="absolute right-0 mt-2 w-80 rounded-xl border border-gray-200 bg-white p-4 shadow-theme-lg dark:border-gray-800 dark:bg-gray-900">
-                        <div class="mb-4 flex items-center justify-between">
-                            <h3 class="text-sm font-semibold text-gray-800 dark:text-white/90">Notifikasi</h3>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">3 baru</span>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="flex items-start gap-3 rounded-lg p-2 hover:bg-gray-50 dark:hover:bg-white/5">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-500 dark:bg-brand-500/10">
-                                    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                                    </svg>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-sm text-gray-800 dark:text-white/90">Pesanan baru dari Meja 5</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">2 menit yang lalu</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- User Dropdown -->
             <div class="relative" x-data="{ isOpen: false }">
                 <button @click="isOpen = !isOpen" class="flex items-center gap-3 text-left">
-                    <div class="h-11 w-11 overflow-hidden rounded-full border-2 border-gray-200 dark:border-gray-800">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'User') }}&background=465fff&color=fff" alt="User" class="h-full w-full object-cover" />
+                    <div class="h-11 w-11 overflow-hidden rounded-full border-2 border-error-200 dark:border-error-800">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}&background=dc2626&color=fff" alt="Admin" class="h-full w-full object-cover" />
                     </div>
                     <div class="hidden xl:block">
-                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ auth()->user()->name ?? 'User' }}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ auth()->user()->email ?? '' }}</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ auth()->user()->name ?? 'Admin' }}</p>
+                        <p class="text-xs text-error-500 dark:text-error-400">Super Admin</p>
                     </div>
                     <svg class="hidden xl:block size-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -155,19 +121,10 @@
                     </a>
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5">
                         <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
-                        Pengaturan
+                        Dashboard Utama
                     </a>
-                    @if(auth()->user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-error-600 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-500/10">
-                        <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                        </svg>
-                        Admin Panel
-                    </a>
-                    @endif
                     <div class="my-2 border-t border-gray-200 dark:border-gray-800"></div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
