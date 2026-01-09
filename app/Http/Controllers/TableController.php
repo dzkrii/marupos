@@ -208,10 +208,7 @@ class TableController extends Controller
         $outlet = Auth::user()->currentOutlet;
         $qrUrl = route('qr.menu', [$outlet->slug, $table->qr_code]);
 
-        $qrCode = QrCode::format('svg')
-            ->size(400)
-            ->margin(2)
-            ->generate($qrUrl);
+        $qrCode = $this->generateQrSvg($qrUrl, "Meja " . $table->number);
 
         return response($qrCode)
             ->header('Content-Type', 'image/svg+xml')
@@ -245,10 +242,7 @@ class TableController extends Controller
         if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
             foreach ($tables as $table) {
                 $qrUrl = route('qr.menu', [$outlet->slug, $table->qr_code]);
-                $qrCode = QrCode::format('svg')
-                    ->size(400)
-                    ->margin(2)
-                    ->generate($qrUrl);
+                $qrCode = $this->generateQrSvg($qrUrl, "Meja " . $table->number);
 
                 $fileName = "meja-{$table->number}.svg";
                 $zip->addFromString($fileName, $qrCode);
@@ -299,5 +293,44 @@ class TableController extends Controller
         if ($table->outlet_id !== $outlet->id) {
             abort(403, 'Unauthorized access.');
         }
+    }
+
+    /**
+     * Generate QR code SVG with label.
+     */
+    private function generateQrSvg(string $url, string $label): string
+    {
+        $size = 400;
+        $margin = 2; // Margin blocks
+        $labelHeight = 50;
+        $newHeight = $size + $labelHeight;
+
+        $qrContent = (string) QrCode::format('svg')
+            ->size($size)
+            ->margin($margin)
+            ->generate($url);
+
+        // Update SVG dimensions to fit label
+        $qrContent = str_replace(
+            [
+                'width="' . $size . '" height="' . $size . '" viewBox="0 0 ' . $size . ' ' . $size . '"',
+                'width="' . $size . '" height="' . $size . '" fill="#ffffff"'
+            ],
+            [
+                'width="' . $size . '" height="' . $newHeight . '" viewBox="0 0 ' . $size . ' ' . $newHeight . '"',
+                'width="' . $size . '" height="' . $newHeight . '" fill="#ffffff"'
+            ],
+            $qrContent
+        );
+
+        // Add label text
+        $labelSvg = sprintf(
+            '<text x="%d" y="%d" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#000000">%s</text>',
+            $size / 2,
+            $size + 35,
+            htmlspecialchars($label)
+        );
+
+        return str_replace('</svg>', $labelSvg . '</svg>', $qrContent);
     }
 }
