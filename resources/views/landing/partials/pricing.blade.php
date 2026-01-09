@@ -83,7 +83,7 @@
             </div>
 
             {{-- Custom / Enterprise Plan --}}
-            <div className="relative bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-theme-lg transition-all duration-300" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+            <div class="relative bg-white dark:bg-gray-800 p-6 lg:p-8 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-theme-lg transition-all duration-300" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
                 <div class="mb-6 text-center">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Custom / Enterprise</h3>
                     <p class="text-gray-500 dark:text-gray-400 text-theme-sm">Untuk kebutuhan bisnis yang spesifik</p>

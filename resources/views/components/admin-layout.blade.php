@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $title ?? 'Admin Dashboard' }} | MARUPOS Admin</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/marupos-symbol.png') }}">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -23,7 +23,7 @@
     <meta name="twitter:description" content="Sistem POS modern untuk restoran Indonesia. Kelola bisnis lebih efisien dengan teknologi terkini.">
     
     {{-- Favicon --}}
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/marupos-symbol.png') }}">
     
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.bunny.net">
