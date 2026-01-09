@@ -23,7 +23,8 @@
         <div class="max-w-7xl mx-auto mb-8">
             <div class="flex items-center justify-between">
                 <a href="/" class="inline-flex items-center gap-2">
-                    <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="MARUPOS" class="h-10 w-auto dark:brightness-0 dark:invert" />
+                    <img src="{{ asset('images/marupos-logo.png') }}" alt="MARUPOS" class="h-10 w-auto dark:hidden">
+                    <img src="{{ asset('images/marupos-logo-white.png') }}" alt="MARUPOS" class="h-10 w-auto hidden dark:block">
                 </a>
                 <a href="{{ route('subscription.plans') }}" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
