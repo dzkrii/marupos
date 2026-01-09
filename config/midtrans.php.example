@@ -1,0 +1,35 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Midtrans Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Konfigurasi untuk integrasi Midtrans payment gateway.
+    | 
+    | INSTRUKSI SETUP:
+    | 1. Copy file ini ke config/midtrans.php
+    | 2. Isi kredensial Midtrans Anda (dari Dashboard Midtrans)
+    | 3. Untuk testing, gunakan kredensial Sandbox
+    |
+    */
+
+    'merchant_id' => env('MIDTRANS_MERCHANT_ID', 'YOUR_MERCHANT_ID'),
+    'client_key' => env('MIDTRANS_CLIENT_KEY', 'YOUR_CLIENT_KEY'),
+    'server_key' => env('MIDTRANS_SERVER_KEY', 'YOUR_SERVER_KEY'),
+
+    // Set to true for sandbox/testing, false for production
+    'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+
+    // Set to true to sanitize user input
+    'is_sanitized' => env('MIDTRANS_IS_SANITIZED', true),
+
+    // Set to true to enable 3D Secure
+    'is_3ds' => env('MIDTRANS_IS_3DS', true),
+
+    // Snap API URL
+    'snap_url' => env('MIDTRANS_IS_PRODUCTION', false) 
+        ? 'https://app.midtrans.com/snap/snap.js' 
+        : 'https://app.sandbox.midtrans.com/snap/snap.js',
+];

@@ -86,9 +86,11 @@ class SubscriptionController extends Controller
         } catch (\Exception $e) {
             $subscription->delete();
             
+            \Illuminate\Support\Facades\Log::error('Midtrans Error: ' . $e->getMessage());
+            
             return back()
                 ->withInput()
-                ->withErrors(['payment' => 'Gagal membuat transaksi pembayaran. Silakan coba lagi.']);
+                ->withErrors(['payment' => 'Gagal membuat transaksi: ' . $e->getMessage()]);
         }
     }
 
