@@ -31,17 +31,6 @@
                 ],
             ]
         ],
-        [
-            'title' => 'Pengaturan',
-            'items' => [
-                [
-                    'name' => 'Paket Langganan',
-                    'path' => '/admin/plans',
-                    'icon' => 'package',
-                    'routes' => ['admin.plans.*'],
-                ],
-            ]
-        ],
     ];
     
     // Icon SVGs
@@ -83,7 +72,7 @@
             <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                 class="flex items-center gap-2">
                 <img class="h-10 w-auto dark:brightness-0 dark:invert" 
-                    src="{{ asset('images/logo-premium-nobg.png') }}" 
+                    src="{{ asset('images/marupos-logo.png') }}" 
                     alt="MARUPOS" />
                 <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-error-100 text-error-600 dark:bg-error-500/20 dark:text-error-400">
                     Admin
@@ -91,8 +80,8 @@
             </div>
             <!-- Icon Only -->
             <div x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                class="flex items-center justify-center w-10 h-10 rounded-lg bg-error-500 text-white font-bold text-lg">
-                A
+                class="flex items-center justify-center w-10 h-10">
+                <img class="h-8 w-auto" src="{{ asset('images/marupos-symbol.png') }}" alt="M" />
             </div>
         </a>
     </div>
