@@ -19,12 +19,12 @@
             {{-- FAQ Item 1 --}}
             <div class="border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
                 <button @click="activeIndex = activeIndex === 0 ? null : 0" class="w-full flex items-center justify-between p-5 text-left bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <span class="font-semibold text-gray-900 dark:text-white">Apakah ada trial gratis?</span>
+                    <span class="font-semibold text-gray-900 dark:text-white">Apakah ada demo produk?</span>
                     <svg :class="activeIndex === 0 ? 'rotate-180' : ''" class="w-5 h-5 text-gray-500 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
                 <div x-show="activeIndex === 0" x-collapse>
                     <div class="p-5 bg-white dark:bg-gray-950 text-gray-600 dark:text-gray-400">
-                        Ya! Kami menyediakan trial gratis selama 14 hari untuk semua fitur tanpa memerlukan kartu kredit. Anda bisa mencoba semua fitur Professional selama periode trial.
+                        Ya! Anda bisa melihat video demo di halaman ini atau menghubungi tim sales kami untuk penjadwalan demo langsung secara online.
                     </div>
                 </div>
             </div>

@@ -21,13 +21,12 @@
         </h2>
         
         <p class="text-white/80 text-lg mb-10 max-w-2xl mx-auto">
-            Mulai gratis 14 hari. Tidak perlu kartu kredit. Batalkan kapan saja. 
-            <span class="text-white font-medium">Lebih dari 500 restoran</span> sudah mempercayai MARUPOS.
+            Bergabung dengan <span class="text-white font-medium">lebih dari 500 restoran</span> yang telah mempercayai MARUPOS untuk operasional bisnis mereka.
         </p>
         
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="{{ route('register') }}" class="group flex items-center gap-2 bg-white hover:bg-gray-100 text-brand-600 rounded-xl px-8 py-4 font-semibold transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5">
-                Daftar Sekarang — Gratis
+                Daftar Sekarang
                 <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
             </a>
             <a href="#contact" class="flex items-center gap-2 px-8 py-4 border border-white/30 hover:border-white/50 hover:bg-white/10 text-white rounded-xl font-semibold transition-all backdrop-blur-sm">
@@ -44,7 +43,7 @@
             </div>
             <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-success-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                Tidak perlu kartu kredit
+                Fitur Terlengkap
             </div>
             <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-success-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>

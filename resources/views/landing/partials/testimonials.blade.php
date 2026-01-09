@@ -7,10 +7,10 @@
                 TESTIMONI
             </span>
             <h2 class="text-title-md font-bold text-gray-900 dark:text-white mb-4">
-                Dipercaya oleh Pemilik Restoran
+                Dipercaya oleh Ribuan Pemilik Bisnis
             </h2>
             <p class="text-gray-600 dark:text-gray-400 text-lg">
-                Lihat bagaimana MARUPOS telah membantu ratusan restoran meningkatkan efisiensi operasional mereka.
+                Lihat bagaimana MARUPOS telah membantu berbagai jenis usaha meningkatkan efisiensi operasional mereka.
             </p>
         </div>
 
@@ -24,15 +24,15 @@
                     @endfor
                 </div>
                 <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                    "MARUPOS benar-benar mengubah cara kami mengelola warung. Pesanan tidak pernah kelewat lagi, dapur selalu update, dan laporan keuangan jadi sangat rapi. Worth it banget!"
+                    "Sistem inventory MARUPOS sangat membantu kami memantau stok barang di toko retail kami. Notifikasi stok menipis sangat berguna, kami jadi jarang kehabisan barang best seller."
                 </p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-semibold text-lg">
-                        BP
+                        DI
                     </div>
                     <div>
-                        <div class="font-semibold text-gray-900 dark:text-white">Budi Pratama</div>
-                        <div class="text-theme-sm text-gray-500 dark:text-gray-400">Owner, Warung Sederhana Jakarta</div>
+                        <div class="font-semibold text-gray-900 dark:text-white">Dani Iskandar</div>
+                        <div class="text-theme-sm text-gray-500 dark:text-gray-400">Owner, Toko Berkah Retail</div>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,7 @@
                     @endfor
                 </div>
                 <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                    "Kami punya 5 cabang dan MARUPOS membantu kami mengelola semuanya dari satu tempat. Laporan terpusat, data aman per outlet. Support-nya juga responsif sekali!"
+                    "Kami mengelola 5 cabang franchise minuman dan MARUPOS memudahkan pemantauan penjualan secara real-time dari pusat. Sangat efisien untuk manajemen multi-outlet."
                 </p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-warning-400 to-warning-600 flex items-center justify-center text-white font-semibold text-lg">
@@ -74,7 +74,7 @@
                     </div>
                     <div>
                         <div class="font-semibold text-gray-900 dark:text-white">Rudi Hartono</div>
-                        <div class="text-theme-sm text-gray-500 dark:text-gray-400">CEO, Resto Keluarga Bahagia</div>
+                        <div class="text-theme-sm text-gray-500 dark:text-gray-400">CEO, Fresh Tea Franchise</div>
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
                     @endfor
                 </div>
                 <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                    "Setup-nya super gampang, dalam sehari kami sudah bisa mulai pakai. Interface-nya juga user-friendly, karyawan yang tidak terlalu tech-savvy pun cepat mengerti."
+                    "Sistem kasir yang simpel tapi powerful. Sangat cocok untuk food truck kami yang butuh kecepatan transaksi. struk digital via WA juga jadi nilai plus buat pelanggan."
                 </p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-light-400 to-blue-light-600 flex items-center justify-center text-white font-semibold text-lg">
@@ -116,7 +116,7 @@
                     </div>
                     <div>
                         <div class="font-semibold text-gray-900 dark:text-white">Anton Wijaya</div>
-                        <div class="text-theme-sm text-gray-500 dark:text-gray-400">Owner, Bakso Pak Anton</div>
+                        <div class="text-theme-sm text-gray-500 dark:text-gray-400">Owner, Burger On Wheels</div>
                     </div>
                 </div>
             </div>
@@ -129,7 +129,7 @@
                     @endfor
                 </div>
                 <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                    "Laporan keuangan detail dan bisa di-export. Sekarang kami bisa analisis menu mana yang paling laris dan kapan peak hour. Data-driven decisions jadi lebih mudah."
+                    "Fitur pelanggan dan loyalty point-nya sangat membantu kami menjaga customer retention di barbershop kami. Pelanggan senang bisa kumpulkan poin setiap kali datang."
                 </p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold text-lg">
@@ -137,7 +137,7 @@
                     </div>
                     <div>
                         <div class="font-semibold text-gray-900 dark:text-white">Linda Permata</div>
-                        <div class="text-theme-sm text-gray-500 dark:text-gray-400">Finance Manager, Seafood Paradise</div>
+                        <div class="text-theme-sm text-gray-500 dark:text-gray-400">Owner, Gentleman Barber</div>
                     </div>
                 </div>
             </div>

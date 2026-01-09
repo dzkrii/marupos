@@ -15,7 +15,7 @@
                     BARU
                 </span>
                 <span class="flex items-center gap-1.5">
-                    Coba gratis 14 hari tanpa kartu kredit
+                    Solusi lengkap manajemen restoran modern
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </span>
             </a>
@@ -34,7 +34,7 @@
             {{-- CTA Buttons --}}
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
                 <a href="{{ route('register') }}" class="group flex items-center gap-2 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white rounded-xl px-8 py-4 font-semibold transition-all shadow-lg shadow-brand-500/25 hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5">
-                    Mulai Gratis Sekarang
+                    Mulai Sekarang
                     <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </a>
                 <a href="#features" class="group flex items-center gap-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition text-gray-700 dark:text-gray-300 rounded-xl px-8 py-4 font-semibold shadow-theme-xs">

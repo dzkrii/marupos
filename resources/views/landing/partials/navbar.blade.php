@@ -4,7 +4,7 @@
     <div class="w-full py-2.5 font-medium text-theme-sm text-white text-center bg-gradient-to-r from-brand-600 via-brand-500 to-success-500">
         <p class="flex items-center justify-center gap-2 flex-wrap">
             <span class="px-3 py-1 rounded-full text-brand-600 bg-white font-semibold text-theme-xs">PROMO</span>
-            <span>Coba MARUPOS hari ini dan dapatkan diskon 20% untuk 3 bulan pertama!</span>
+            <span>Dapatkan diskon 20% untuk 3 bulan pertama!</span>
         </p>
     </div>
 
@@ -31,7 +31,7 @@
             </a>
             @if (Route::has('register'))
                 <a href="{{ route('register') }}" class="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 transition text-white rounded-lg font-medium shadow-theme-xs">
-                    Daftar Gratis
+                    Daftar Sekarang
                 </a>
             @endif
         </div>
@@ -83,7 +83,7 @@
                     </a>
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="block w-full text-center px-4 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-medium transition">
-                            Daftar Gratis
+                            Daftar Sekarang
                         </a>
                     @endif
                 </div>

@@ -27,7 +27,7 @@
                         <div class="hidden md:block absolute left-full top-1/2 w-full h-0.5 bg-gradient-to-r from-brand-300 to-success-300 dark:from-brand-700 dark:to-success-700 -translate-y-1/2 ml-4"></div>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Daftar Akun</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Buat akun gratis dalam 2 menit. Tidak perlu kartu kredit untuk mencoba trial 14 hari.</p>
+                    <p class="text-gray-600 dark:text-gray-400">Daftar akun dalam 2 menit. Proses registrasi cepat dan mudah.</p>
                 </div>
             </div>
 
@@ -63,7 +63,7 @@
         {{-- CTA --}}
         <div class="mt-16 text-center" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
             <a href="{{ route('register') }}" class="inline-flex items-center gap-2 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white rounded-xl px-8 py-4 font-semibold transition-all shadow-lg shadow-brand-500/25 hover:shadow-xl hover:shadow-brand-500/30">
-                Coba Gratis Sekarang
+                Mulai Sekarang
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
             </a>
         </div>
