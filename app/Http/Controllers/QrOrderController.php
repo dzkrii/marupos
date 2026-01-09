@@ -270,7 +270,8 @@ class QrOrderController extends Controller
                 'table_id' => $cart['table_id'],
                 'user_id' => null, // QR order has no user (staff)
                 'order_type' => Order::TYPE_QR_ORDER,
-                'status' => Order::STATUS_PENDING,
+                'status' => Order::STATUS_CONFIRMED,
+                'confirmed_at' => now(),
                 'customer_name' => $request->customer_name ?: 'Customer',
                 'customer_phone' => $request->customer_phone,
                 'guest_count' => 1,
