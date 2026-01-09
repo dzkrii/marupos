@@ -136,6 +136,134 @@ class OrderController extends Controller
     }
 
     /**
+     * Display ready-to-serve orders for waiters.
+     */
+    public function ready(Request $request)
+    {
+        $outlet = Auth::user()->current_outlet;
+        $outletId = $outlet ? $outlet->id : null;
+        
+        if (!$outletId) {
+            return view('orders.ready', [
+                'orders' => collect([]),
+                'readyCount' => 0,
+                'completedTodayCount' => 0,
+            ]);
+        }
+
+        $query = Order::where('outlet_id', $outletId)
+            ->with(['table', 'items', 'user', 'payments'])
+            ->latest();
+
+        // Filter by status: ready or completed (served but maybe not paid)
+        $statusFilter = $request->get('status', 'ready');
+        
+        if ($statusFilter === 'ready') {
+            $query->where('status', Order::STATUS_READY);
+        } elseif ($statusFilter === 'completed') {
+            $query->where('status', Order::STATUS_COMPLETED)
+                ->whereDate('created_at', today());
+        } else {
+            // All - both ready and completed today
+            $query->where(function($q) {
+                $q->where('status', Order::STATUS_READY)
+                  ->orWhere(function($q2) {
+                      $q2->where('status', Order::STATUS_COMPLETED)
+                         ->whereDate('created_at', today());
+                  });
+            });
+        }
+
+        $orders = $query->paginate(20)->appends($request->query());
+
+        // Statistics
+        $readyCount = Order::where('outlet_id', $outletId)
+            ->where('status', Order::STATUS_READY)
+            ->count();
+
+        $completedTodayCount = Order::where('outlet_id', $outletId)
+            ->where('status', Order::STATUS_COMPLETED)
+            ->whereDate('created_at', today())
+            ->count();
+
+        return view('orders.ready', compact(
+            'orders',
+            'readyCount',
+            'completedTodayCount'
+        ));
+    }
+
+    /**
+     * Display cashier view - unpaid orders for payment processing.
+     */
+    public function cashierIndex(Request $request)
+    {
+        $outlet = Auth::user()->current_outlet;
+        $outletId = $outlet ? $outlet->id : null;
+        
+        if (!$outletId) {
+            return view('orders.cashier', [
+                'orders' => collect([]),
+                'unpaidCount' => 0,
+                'paidTodayCount' => 0,
+                'todayRevenue' => 0,
+            ]);
+        }
+
+        $query = Order::where('outlet_id', $outletId)
+            ->with(['table', 'items', 'user', 'payments'])
+            ->latest();
+
+        // Search by table number
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('table', function($q) use ($search) {
+                $q->where('number', 'like', "%{$search}%");
+            });
+        }
+
+        // Date filter
+        $date = $request->filled('date') ? $request->date : today()->format('Y-m-d');
+        $query->whereDate('created_at', $date);
+
+        // Payment status filter
+        $paymentFilter = $request->get('payment', 'unpaid');
+        
+        if ($paymentFilter === 'unpaid') {
+            $query->whereNotIn('status', [Order::STATUS_CANCELLED, Order::STATUS_COMPLETED]);
+        } elseif ($paymentFilter === 'paid') {
+            $query->where('status', Order::STATUS_COMPLETED);
+        }
+        // 'all' shows everything
+
+        $orders = $query->paginate(20)->appends($request->query());
+
+        // Statistics
+        $unpaidCount = Order::where('outlet_id', $outletId)
+            ->whereDate('created_at', today())
+            ->where('status', '!=', Order::STATUS_CANCELLED)
+            ->where('status', '!=', Order::STATUS_COMPLETED)
+            ->count();
+
+        $paidTodayCount = Order::where('outlet_id', $outletId)
+            ->whereDate('created_at', today())
+            ->where('status', Order::STATUS_COMPLETED)
+            ->count();
+
+        $todayRevenue = Order::where('outlet_id', $outletId)
+            ->whereDate('created_at', today())
+            ->where('status', Order::STATUS_COMPLETED)
+            ->sum('total_amount');
+
+        return view('orders.cashier', compact(
+            'orders',
+            'unpaidCount',
+            'paidTodayCount',
+            'todayRevenue'
+        ));
+    }
+
+    /**
      * Show the form for creating a new order - Table selection.
      */
     public function create(Request $request)

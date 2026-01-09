@@ -102,6 +102,9 @@ Route::middleware(['auth', 'verified', 'outlet.access'])->group(function () {
         Route::get('orders/create/menu/{table}', [OrderController::class, 'selectMenu'])->name('orders.select-menu.table');
         Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
         
+        // Ready orders - Siap Saji
+        Route::get('orders/ready', [OrderController::class, 'ready'])->name('orders.ready');
+        
         // Edit/Add items to existing orders
         Route::get('orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
         Route::put('orders/{order}', [OrderController::class, 'update'])->name('orders.update');
@@ -115,6 +118,10 @@ Route::middleware(['auth', 'verified', 'outlet.access'])->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::middleware('capability:cashier')->group(function () {
+        // Cashier main page
+        Route::get('cashier', [OrderController::class, 'cashierIndex'])->name('cashier.index');
+        
+        // Payment processing
         Route::get('orders/{order}/payment', [PaymentController::class, 'create'])->name('payments.create');
         Route::post('orders/{order}/payment', [PaymentController::class, 'store'])->name('payments.store');
     });

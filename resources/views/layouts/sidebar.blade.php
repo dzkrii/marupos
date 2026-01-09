@@ -52,7 +52,7 @@
             ]
         ],
         [
-            'title' => 'POS',
+            'title' => 'Pelayanan',
             'items' => [
                 [
                     'name' => 'Buat Pesanan',
@@ -62,11 +62,23 @@
                     'capability' => 'waiter',
                 ],
                 [
-                    'name' => 'Daftar Pesanan',
-                    'path' => '/orders',
-                    'icon' => 'history',
-                    'routes' => ['orders.index', 'orders.show', 'payments.create', 'payments.store'],
-                    'capability' => 'orders',
+                    'name' => 'Siap Saji',
+                    'path' => '/orders/ready',
+                    'icon' => 'ready',
+                    'routes' => ['orders.ready'],
+                    'capability' => 'waiter',
+                ],
+            ]
+        ],
+        [
+            'title' => 'Kasir',
+            'items' => [
+                [
+                    'name' => 'Daftar Pembayaran',
+                    'path' => '/cashier',
+                    'icon' => 'cashier',
+                    'routes' => ['cashier.index', 'orders.show', 'payments.create', 'payments.store'],
+                    'capability' => 'cashier',
                 ],
             ]
         ],
@@ -126,6 +138,7 @@
         'kitchen' => '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>',
         'employees' => '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
         'report' => '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>',
+        'ready' => '<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
     ];
     
     function isRouteActive($routes) {
