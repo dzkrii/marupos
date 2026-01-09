@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ $title ?? config('app.name', 'Restozen') }}</title>
+        <title>{{ $title ?? config('app.name', 'MARUPOS') }}</title>
 
         <!-- Fonts - Inter -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -38,14 +38,14 @@
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                             </svg>
                         </div>
-                        <span class="text-2xl font-bold text-white">Restozen</span>
+                        <span class="text-2xl font-bold text-white">MARUPOS</span>
                     </div>
                     <h1 class="text-4xl font-bold text-white leading-tight">
-                        Kelola Restoran<br>
+                        Kelola Bisnis<br>
                         <span class="text-white/80">Lebih Mudah & Efisien</span>
                     </h1>
                     <p class="text-white/70 mt-4 text-lg max-w-md">
-                        Sistem POS modern untuk restoran dengan fitur lengkap: manajemen meja, pesanan, dapur, dan laporan real-time.
+                        Sistem POS modern untuk berbagai jenis usaha dengan fitur lengkap: manajemen outlet, pesanan, dan laporan real-time.
                     </p>
                 </div>
 
@@ -86,7 +86,7 @@
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                             </svg>
                         </div>
-                        <span class="text-xl font-bold text-gray-900">Restozen</span>
+                        <span class="text-xl font-bold text-gray-900">MARUPOS</span>
                     </div>
                 </div>
 
@@ -96,7 +96,7 @@
 
                 <!-- Footer -->
                 <div class="mt-8 text-center text-sm text-gray-500">
-                    <p>&copy; {{ date('Y') }} Restozen. All rights reserved.</p>
+                    <p>&copy; {{ date('Y') }} MARUPOS. All rights reserved.</p>
                 </div>
             </div>
         </div>

@@ -84,7 +84,7 @@
                 class="flex items-center gap-2">
                 <img class="h-10 w-auto dark:brightness-0 dark:invert" 
                     src="{{ asset('images/logo-premium-nobg.png') }}" 
-                    alt="RestoZen" />
+                    alt="MARUPOS" />
                 <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-error-100 text-error-600 dark:bg-error-500/20 dark:text-error-400">
                     Admin
                 </span>

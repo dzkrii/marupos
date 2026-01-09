@@ -141,7 +141,7 @@ class RegisteredUserController extends Controller
         session(['current_outlet_id' => $user->defaultOutlet()?->id]);
 
         return redirect(route('dashboard', absolute: false))
-            ->with('success', 'Selamat datang di RestoZen! Akun Anda telah berhasil diaktifkan.');
+            ->with('success', 'Selamat datang di MARUPOS! Akun Anda telah berhasil diaktifkan.');
     }
 
     /**

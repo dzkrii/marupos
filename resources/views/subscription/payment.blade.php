@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Pembayaran - {{ $plan->name }} | {{ config('app.name', 'RestoZen') }}</title>
+    <title>Pembayaran - {{ $plan->name }} | {{ config('app.name', 'MARUPOS') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     {{-- Midtrans Snap.js --}}
@@ -26,7 +26,7 @@
             {{-- Logo --}}
             <div class="text-center mb-8">
                 <a href="/" class="inline-block">
-                    <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen" class="h-12 w-auto mx-auto dark:brightness-0 dark:invert" />
+                    <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="MARUPOS" class="h-12 w-auto mx-auto dark:brightness-0 dark:invert" />
                 </a>
             </div>
 

@@ -5,7 +5,7 @@
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h2 class="text-xl font-semibold text-gray-800 dark:text-white/90">Dashboard Admin</h2>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Ringkasan performa platform RestoZen</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Ringkasan performa platform MARUPOS</p>
         </div>
         <div class="flex items-center gap-3">
             <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-400">

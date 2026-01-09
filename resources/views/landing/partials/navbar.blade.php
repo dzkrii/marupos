@@ -4,15 +4,15 @@
     <div class="w-full py-2.5 font-medium text-theme-sm text-white text-center bg-gradient-to-r from-brand-600 via-brand-500 to-success-500">
         <p class="flex items-center justify-center gap-2 flex-wrap">
             <span class="px-3 py-1 rounded-full text-brand-600 bg-white font-semibold text-theme-xs">PROMO</span>
-            <span>Coba RestoZen hari ini dan dapatkan diskon 20% untuk 3 bulan pertama!</span>
+            <span>Coba MARUPOS hari ini dan dapatkan diskon 20% untuk 3 bulan pertama!</span>
         </p>
     </div>
 
     {{-- Main Navbar --}}
     <nav class="flex items-center justify-between w-full py-4 px-6 md:px-16 lg:px-24 xl:px-32 backdrop-blur-md bg-white/95 dark:bg-gray-900/95 text-gray-700 dark:text-gray-300 text-theme-sm border-b border-gray-200 dark:border-gray-800 shadow-theme-xs">
         <a href="/" class="flex items-center gap-3">
-            <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen Logo" class="h-9 w-auto dark:hidden">
-            <img src="{{ asset('images/logo-premium-nobg-white.png') }}" alt="RestoZen Logo" class="h-9 w-auto hidden dark:block">
+            <img src="{{ asset('images/marupos-logo.png') }}" alt="MARUPOS Logo" class="h-9 w-auto dark:hidden">
+            <img src="{{ asset('images/marupos-logo-white.png') }}" alt="MARUPOS Logo" class="h-9 w-auto hidden dark:block">
         </a>
 
         {{-- Desktop Menu --}}
@@ -64,8 +64,8 @@
              class="fixed top-0 right-0 h-full w-72 z-99999 bg-white dark:bg-gray-900 shadow-theme-xl md:hidden">
             <div class="flex flex-col h-full">
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
-                    <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen Logo" class="h-8 w-auto dark:hidden">
-                    <img src="{{ asset('images/logo-premium-nobg-white.png') }}" alt="RestoZen Logo" class="h-8 w-auto hidden dark:block">
+                    <img src="{{ asset('images/marupos-logo.png') }}" alt="MARUPOS Logo" class="h-8 w-auto dark:hidden">
+                    <img src="{{ asset('images/marupos-logo-white.png') }}" alt="MARUPOS Logo" class="h-8 w-auto hidden dark:block">
                     <button @click="mobileMenuOpen = false" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                     </button>

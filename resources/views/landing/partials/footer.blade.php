@@ -5,10 +5,10 @@
             {{-- Company Info --}}
             <div class="lg:col-span-2">
                 <a href="/" class="inline-block mb-6">
-                    <img src="{{ asset('images/logo-premium-nobg-white.png') }}" alt="RestoZen Logo" class="h-10 w-auto">
+                    <img src="{{ asset('images/marupos-logo-white.png') }}" alt="MARUPOS Logo" class="h-10 w-auto">
                 </a>
                 <p class="text-gray-400 mb-6 max-w-sm leading-relaxed">
-                    Sistem POS modern untuk restoran Indonesia. Kelola bisnis lebih efisien dengan teknologi terkini yang mudah digunakan.
+                    Sistem POS modern untuk berbagai jenis usaha. Kelola bisnis lebih efisien dengan teknologi terkini yang mudah digunakan.
                 </p>
                 <div class="flex items-center gap-3">
                     <a href="#" class="w-10 h-10 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors">
@@ -55,9 +55,9 @@
                 <h4 class="text-white font-semibold mb-5">Kontak</h4>
                 <ul class="space-y-3">
                     <li>
-                        <a href="mailto:support@restozen.id" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                        <a href="mailto:support@marupos.id" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            support@restozen.id
+                            support@marupos.id
                         </a>
                     </li>
                     <li>
@@ -83,7 +83,7 @@
         {{-- Bottom Footer --}}
         <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p class="text-gray-500 text-theme-sm">
-                &copy; {{ date('Y') }} RestoZen. All rights reserved.
+                &copy; {{ date('Y') }} MARUPOS. All rights reserved.
             </p>
             <div class="flex items-center gap-6">
                 <a href="#" class="text-gray-500 hover:text-gray-400 text-theme-sm transition-colors">Kebijakan Privasi</a>

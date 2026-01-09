@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     {{-- SEO Meta Tags --}}
-    <title>RestoZen - Modern POS untuk Restoran Anda</title>
-    <meta name="description" content="RestoZen adalah sistem POS modern untuk restoran dengan fitur lengkap: manajemen menu, QR order, kitchen display, dan laporan keuangan. Coba gratis 14 hari!">
+    <title>MARUPOS - Modern POS untuk Restoran Anda</title>
+    <meta name="description" content="MARUPOS adalah sistem POS modern untuk restoran dengan fitur lengkap: manajemen menu, QR order, kitchen display, dan laporan keuangan. Coba gratis 14 hari!">
     <meta name="keywords" content="POS restoran, sistem kasir restoran, manajemen restoran, QR order, kitchen display system">
-    <meta name="author" content="RestoZen">
+    <meta name="author" content="MARUPOS">
     
     {{-- Open Graph / Social Media --}}
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url('/') }}">
-    <meta property="og:title" content="RestoZen - Modern POS untuk Restoran Anda">
+    <meta property="og:title" content="MARUPOS - Modern POS untuk Restoran Anda">
     <meta property="og:description" content="Sistem POS modern untuk restoran Indonesia. Kelola bisnis lebih efisien dengan teknologi terkini.">
     <meta property="og:image" content="{{ asset('images/og-image.png') }}">
     
     {{-- Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="RestoZen - Modern POS untuk Restoran Anda">
+    <meta name="twitter:title" content="MARUPOS - Modern POS untuk Restoran Anda">
     <meta name="twitter:description" content="Sistem POS modern untuk restoran Indonesia. Kelola bisnis lebih efisien dengan teknologi terkini.">
     
     {{-- Favicon --}}

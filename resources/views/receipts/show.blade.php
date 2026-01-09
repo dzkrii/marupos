@@ -171,7 +171,7 @@
     <div class="receipt">
         {{-- Header --}}
         <div class="header">
-            <h1>{{ $order->outlet->name ?? 'RESTOZEN' }}</h1>
+            <h1>{{ $order->outlet->name ?? 'MARUPOS' }}</h1>
             <p>{{ $order->outlet->address ?? '' }}</p>
             @if($order->outlet->phone)
                 <p>Telp: {{ $order->outlet->phone }}</p>

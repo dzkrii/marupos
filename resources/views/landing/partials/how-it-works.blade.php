@@ -10,7 +10,7 @@
                 Mulai dalam 3 Langkah Mudah
             </h2>
             <p class="text-gray-600 dark:text-gray-400 text-lg">
-                Tidak perlu instalasi rumit. Daftar, setup, dan langsung gunakan RestoZen untuk restoran Anda.
+                Tidak perlu instalasi rumit. Daftar, setup, dan langsung gunakan MARUPOS untuk restoran Anda.
             </p>
         </div>
 

@@ -156,12 +156,12 @@
             <!-- Full Logo -->
             <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                 class="h-10 w-auto dark:brightness-0 dark:invert" 
-                src="{{ asset('images/logo-premium-nobg.png') }}" 
-                alt="RestoZen" />
+                src="{{ asset('images/marupos-logo.png') }}" 
+                alt="MARUPOS" />
             <!-- Icon Only -->
             <div x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
                 class="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-500 text-white font-bold text-lg">
-                R
+                M
             </div>
         </a>
     </div>

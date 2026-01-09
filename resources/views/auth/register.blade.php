@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Daftar | {{ config('app.name', 'RestoZen') }}</title>
+    <title>Daftar | {{ config('app.name', 'MARUPOS') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <script>
@@ -63,7 +63,7 @@
                                 Daftar Akun Baru
                             </h1>
                             <p class="text-sm text-gray-500 dark:text-gray-400">
-                                Lengkapi data berikut untuk membuat akun RestoZen
+                                Lengkapi data berikut untuk membuat akun MARUPOS
                             </p>
                         </div>
                         
@@ -209,11 +209,11 @@
                     
                     <div class="flex max-w-sm flex-col items-center px-8">
                         <div class="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 backdrop-blur">
-                            <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen" class="h-12 w-auto brightness-0 invert" />
+                            <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="MARUPOS" class="h-12 w-auto brightness-0 invert" />
                         </div>
                         <h2 class="mb-4 text-2xl font-semibold text-white text-center">Mulai Gratis Sekarang</h2>
                         <p class="text-center text-gray-400 dark:text-white/60">
-                            Daftar dan nikmati fitur lengkap RestoZen POS. Kelola restoran Anda dengan lebih efisien!
+                            Daftar dan nikmati fitur lengkap MARUPOS POS. Kelola restoran Anda dengan lebih efisien!
                         </p>
                         
                         <!-- Features List -->

@@ -48,18 +48,32 @@ layer(base);
 
     /* ========== BRAND COLORS (Easy to change!) ========== */
     /* To change theme color, just update these values */
-    --color-brand-25: #f2f7ff;
-    --color-brand-50: #ecf3ff;
-    --color-brand-100: #dde9ff;
-    --color-brand-200: #c2d6ff;
-    --color-brand-300: #9cb9ff;
-    --color-brand-400: #7592ff;
-    --color-brand-500: #465fff;
-    --color-brand-600: #3641f5;
-    --color-brand-700: #2a31d8;
-    --color-brand-800: #252dae;
-    --color-brand-900: #262e89;
-    --color-brand-950: #161950;
+    /* ========== BRAND COLORS (MARUPOS Teal) ========== */
+    --color-brand-25: #f0fdf9;
+    --color-brand-50: #e6fcf5;
+    --color-brand-100: #ccf7eb;
+    --color-brand-200: #99efd7;
+    --color-brand-300: #66e7c3;
+    --color-brand-400: #33dfaf;
+    --color-brand-500: #20c997;
+    --color-brand-600: #1aa179;
+    --color-brand-700: #13795b;
+    --color-brand-800: #0d513d;
+    --color-brand-900: #06281e;
+    --color-brand-950: #03140f;
+
+    /* ========== NAVY COLORS (MARUPOS Navy) ========== */
+    --color-navy-50: #e6e9ec;
+    --color-navy-100: #ccd3d9;
+    --color-navy-200: #99a7b3;
+    --color-navy-300: #667b8d;
+    --color-navy-400: #334f67;
+    --color-navy-500: #002341;
+    --color-navy-600: #001c34;
+    --color-navy-700: #001527;
+    --color-navy-800: #000e1a;
+    --color-navy-900: #00070d;
+    --color-navy-950: #001f3f; /* Chosen Deep Navy */
 
     --color-blue-light-25: #f5fbff;
     --color-blue-light-50: #f0f9ff;

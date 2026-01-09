@@ -1,1 +1,1 @@
-<img src="{{ asset('images/logo-premium-nobg-nobg.png') }}" {{ $attributes->merge(['alt' => 'RestoZen Logo']) }}>
+<img src="{{ asset('images/marupos-logo.png') }}" {{ $attributes->merge(['alt' => 'MARUPOS Logo']) }}>

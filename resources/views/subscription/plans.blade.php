@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Pilih Paket Berlangganan | {{ config('app.name', 'RestoZen') }}</title>
+    <title>Pilih Paket Berlangganan | {{ config('app.name', 'MARUPOS') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <script>
@@ -24,7 +24,7 @@
         <div class="max-w-7xl mx-auto mb-12">
             <div class="flex items-center justify-between">
                 <a href="/" class="inline-flex items-center gap-2">
-                    <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen" class="h-10 w-auto dark:brightness-0 dark:invert" />
+                    <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="MARUPOS" class="h-10 w-auto dark:brightness-0 dark:invert" />
                 </a>
                 <a href="/" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,7 +41,7 @@
                 Pilih Paket Berlangganan
             </h1>
             <p class="text-lg text-gray-600 dark:text-gray-400">
-                Untuk memulai menggunakan RestoZen, silakan pilih paket berlangganan yang sesuai dengan kebutuhan bisnis Anda.
+                Untuk memulai menggunakan MARUPOS, silakan pilih paket berlangganan yang sesuai dengan kebutuhan bisnis Anda.
             </p>
         </div>
 
@@ -101,7 +101,7 @@
                                     </li>
                                 @endforeach
                             </ul>
-                            <a href="mailto:sales@restozen.id?subject=Enterprise Plan Inquiry" 
+                            <a href="mailto:sales@marupos.id?subject=Enterprise Plan Inquiry" 
                                class="block w-full text-center py-3.5 px-6 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-brand-500 hover:text-brand-500 dark:hover:border-brand-400 dark:hover:text-brand-400 transition-all">
                                 Hubungi Sales
                             </a>

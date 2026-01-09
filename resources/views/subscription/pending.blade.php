@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Pembayaran Pending | {{ config('app.name', 'RestoZen') }}</title>
+    <title>Pembayaran Pending | {{ config('app.name', 'MARUPOS') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <script>
@@ -23,7 +23,7 @@
             {{-- Logo --}}
             <div class="text-center mb-8">
                 <a href="/" class="inline-block">
-                    <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen" class="h-12 w-auto mx-auto dark:brightness-0 dark:invert" />
+                    <img src="{{ asset('images/logo-premium-nobg.png') }}" alt="MARUPOS" class="h-12 w-auto mx-auto dark:brightness-0 dark:invert" />
                 </a>
             </div>
 
@@ -110,7 +110,7 @@
 
             {{-- Support --}}
             <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                Butuh bantuan? <a href="mailto:support@restozen.id" class="text-brand-500 hover:text-brand-600">Hubungi kami</a>
+                Butuh bantuan? <a href="mailto:support@marupos.id" class="text-brand-500 hover:text-brand-600">Hubungi kami</a>
             </div>
         </div>
     </div>

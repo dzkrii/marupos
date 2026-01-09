@@ -22,13 +22,13 @@
 
             {{-- Headline --}}
             <h1 class="mt-8 text-4xl sm:text-5xl lg:text-title-lg font-bold text-gray-900 dark:text-white leading-tight" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
-                Kelola Restoran Anda dengan <br class="hidden sm:block">
+                Kelola Bisnis Anda dengan <br class="hidden sm:block">
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-700">Lebih Mudah</span> dan Efisien
             </h1>
 
             {{-- Subtitle --}}
             <p class="mt-6 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
-                RestoZen membantu Anda mengelola pesanan, menu, meja, dapur, dan laporan keuangan dalam satu platform terintegrasi yang modern dan mudah digunakan.
+                MARUPOS membantu Anda mengelola pesanan, menu, meja, dapur, dan laporan keuangan dalam satu platform terintegrasi yang modern dan mudah digunakan.
             </p>
 
             {{-- CTA Buttons --}}
@@ -45,7 +45,7 @@
 
             {{-- Trusted By --}}
             <div class="mt-16" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
-                <p class="text-theme-sm text-gray-500 dark:text-gray-500 uppercase tracking-wider font-medium mb-6">Dipercaya oleh 500+ restoran di Indonesia</p>
+                <p class="text-theme-sm text-gray-500 dark:text-gray-500 uppercase tracking-wider font-medium mb-6">Dipercaya oleh 500+ usaha di Indonesia</p>
                 <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
                     <div class="text-2xl font-bold text-gray-400">WARUNG<span class="text-brand-500">KU</span></div>
                     <div class="text-2xl font-bold text-gray-400">RESTO<span class="text-success-500">ID</span></div>
@@ -72,7 +72,7 @@
                         <div class="flex-1 flex justify-center">
                             <div class="flex items-center gap-2 bg-gray-700 rounded-lg px-4 py-1.5">
                                 <svg class="w-3.5 h-3.5 text-success-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
-                                <span class="text-gray-400 text-theme-xs">restozen.id/dashboard</span>
+                                <span class="text-gray-400 text-theme-xs">marupos.id/dashboard</span>
                             </div>
                         </div>
                     </div>

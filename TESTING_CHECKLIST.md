@@ -1,4 +1,4 @@
-# RestoZen - Testing Checklist
+# MARUPOS - Testing Checklist
 
 > **Tujuan:** Verifikasi semua fitur berjalan dengan benar dari registrasi hingga operasional penuh.
 

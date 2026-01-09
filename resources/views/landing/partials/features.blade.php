@@ -10,7 +10,7 @@
                 Semua yang Anda Butuhkan dalam Satu Platform
             </h2>
             <p class="text-gray-600 dark:text-gray-400 text-lg">
-                Dari pemesanan hingga laporan keuangan, RestoZen menyediakan solusi lengkap untuk mengelola restoran modern Anda.
+                Dari pemesanan hingga laporan keuangan, MARUPOS menyediakan solusi lengkap untuk mengelola restoran modern Anda.
             </p>
         </div>
 

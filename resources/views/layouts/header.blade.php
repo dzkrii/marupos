@@ -42,7 +42,7 @@
 
             <!-- Logo (mobile only) -->
             <a href="{{ route('dashboard') }}" class="xl:hidden">
-                <img class="h-8 w-auto dark:brightness-0 dark:invert" src="{{ asset('images/logo-premium-nobg.png') }}" alt="RestoZen" />
+                <img class="h-8 w-auto dark:brightness-0 dark:invert" src="{{ asset('images/marupos-logo.png') }}" alt="MARUPOS" />
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->

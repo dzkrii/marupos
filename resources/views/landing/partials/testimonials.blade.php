@@ -10,7 +10,7 @@
                 Dipercaya oleh Pemilik Restoran
             </h2>
             <p class="text-gray-600 dark:text-gray-400 text-lg">
-                Lihat bagaimana RestoZen telah membantu ratusan restoran meningkatkan efisiensi operasional mereka.
+                Lihat bagaimana MARUPOS telah membantu ratusan restoran meningkatkan efisiensi operasional mereka.
             </p>
         </div>
 
@@ -24,7 +24,7 @@
                     @endfor
                 </div>
                 <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                    "RestoZen benar-benar mengubah cara kami mengelola warung. Pesanan tidak pernah kelewat lagi, dapur selalu update, dan laporan keuangan jadi sangat rapi. Worth it banget!"
+                    "MARUPOS benar-benar mengubah cara kami mengelola warung. Pesanan tidak pernah kelewat lagi, dapur selalu update, dan laporan keuangan jadi sangat rapi. Worth it banget!"
                 </p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-semibold text-lg">
@@ -66,7 +66,7 @@
                     @endfor
                 </div>
                 <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                    "Kami punya 5 cabang dan RestoZen membantu kami mengelola semuanya dari satu tempat. Laporan terpusat, data aman per outlet. Support-nya juga responsif sekali!"
+                    "Kami punya 5 cabang dan MARUPOS membantu kami mengelola semuanya dari satu tempat. Laporan terpusat, data aman per outlet. Support-nya juga responsif sekali!"
                 </p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-warning-400 to-warning-600 flex items-center justify-center text-white font-semibold text-lg">

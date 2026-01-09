@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Lengkapi Pendaftaran | {{ config('app.name', 'RestoZen') }}</title>
+    <title>Lengkapi Pendaftaran | {{ config('app.name', 'MARUPOS') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <script>
@@ -222,7 +222,7 @@
                         </div>
                         <h2 class="mb-4 text-2xl font-semibold text-white text-center">Pembayaran Berhasil!</h2>
                         <p class="text-center text-gray-400 dark:text-white/60">
-                            Terima kasih telah berlangganan RestoZen. Tinggal satu langkah lagi untuk mengaktifkan akun Anda!
+                            Terima kasih telah berlangganan MARUPOS. Tinggal satu langkah lagi untuk mengaktifkan akun Anda!
                         </p>
                     </div>
                 </div>

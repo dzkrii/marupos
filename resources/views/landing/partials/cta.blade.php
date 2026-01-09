@@ -22,7 +22,7 @@
         
         <p class="text-white/80 text-lg mb-10 max-w-2xl mx-auto">
             Mulai gratis 14 hari. Tidak perlu kartu kredit. Batalkan kapan saja. 
-            <span class="text-white font-medium">Lebih dari 500 restoran</span> sudah mempercayai RestoZen.
+            <span class="text-white font-medium">Lebih dari 500 restoran</span> sudah mempercayai MARUPOS.
         </p>
         
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
