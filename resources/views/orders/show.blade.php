@@ -47,16 +47,15 @@
                 <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between dark:border-gray-800">
                     <h3 class="font-semibold text-gray-800 dark:text-white/90">Informasi Pesanan</h3>
                     @php
+                        // Simplified status config (4 main statuses)
                         $statusConfig = [
-                            'pending' => ['bg' => 'bg-warning-50 dark:bg-warning-500/15', 'text' => 'text-warning-700 dark:text-warning-400', 'label' => 'Pending'],
-                            'confirmed' => ['bg' => 'bg-brand-50 dark:bg-brand-500/15', 'text' => 'text-brand-700 dark:text-brand-400', 'label' => 'Dikonfirmasi'],
-                            'preparing' => ['bg' => 'bg-purple-50 dark:bg-purple-500/15', 'text' => 'text-purple-700 dark:text-purple-400', 'label' => 'Dimasak'],
+                            'confirmed' => ['bg' => 'bg-brand-50 dark:bg-brand-500/15', 'text' => 'text-brand-700 dark:text-brand-400', 'label' => 'Menunggu Dapur'],
+                            'preparing' => ['bg' => 'bg-purple-50 dark:bg-purple-500/15', 'text' => 'text-purple-700 dark:text-purple-400', 'label' => 'Sedang Dimasak'],
                             'ready' => ['bg' => 'bg-success-50 dark:bg-success-500/15', 'text' => 'text-success-700 dark:text-success-400', 'label' => 'Siap Saji'],
-                            'served' => ['bg' => 'bg-brand-50 dark:bg-brand-500/15', 'text' => 'text-brand-700 dark:text-brand-400', 'label' => 'Disajikan'],
                             'completed' => ['bg' => 'bg-success-50 dark:bg-success-500/15', 'text' => 'text-success-700 dark:text-success-400', 'label' => 'Selesai'],
                             'cancelled' => ['bg' => 'bg-error-50 dark:bg-error-500/15', 'text' => 'text-error-700 dark:text-error-400', 'label' => 'Dibatalkan'],
                         ];
-                        $status = $statusConfig[$order->status] ?? $statusConfig['pending'];
+                        $status = $statusConfig[$order->status] ?? $statusConfig['confirmed'];
                     @endphp
                     <span class="px-3 py-1 rounded-full text-sm font-semibold {{ $status['bg'] }} {{ $status['text'] }}">
                         {{ $status['label'] }}
@@ -187,29 +186,70 @@
                     </div>
                     <div class="p-6 space-y-3">
                         @php
+                            // Simplified status flow:
+                            // confirmed → preparing → ready → completed
                             $statusFlow = [
-                                'pending' => ['confirmed' => 'Konfirmasi Pesanan'],
-                                'confirmed' => ['preparing' => 'Mulai Masak'],
-                                'preparing' => ['ready' => 'Siap Saji'],
-                                'ready' => ['served' => 'Disajikan'],
-                                'served' => ['completed' => 'Selesai'],
+                                'confirmed' => ['preparing' => ['label' => 'Mulai Masak', 'color' => 'purple', 'icon' => 'fire']],
+                                'preparing' => ['ready' => ['label' => 'Siap Saji', 'color' => 'success', 'icon' => 'check']],
+                                'ready' => ['completed' => ['label' => 'Selesai', 'color' => 'success', 'icon' => 'check-circle']],
                             ];
                             $nextStatuses = $statusFlow[$order->status] ?? [];
                         @endphp
 
-                        @foreach($nextStatuses as $nextStatus => $label)
+                        {{-- Info based on current status --}}
+                        @if($order->status === 'confirmed')
+                            <div class="bg-brand-50 dark:bg-brand-500/10 rounded-lg p-3 mb-3">
+                                <p class="text-sm text-brand-700 dark:text-brand-400">
+                                    <svg class="size-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Pesanan menunggu diproses oleh dapur
+                                </p>
+                            </div>
+                        @elseif($order->status === 'preparing')
+                            <div class="bg-purple-50 dark:bg-purple-500/10 rounded-lg p-3 mb-3">
+                                <p class="text-sm text-purple-700 dark:text-purple-400">
+                                    <svg class="size-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                                    </svg>
+                                    Dapur sedang memasak pesanan ini
+                                </p>
+                            </div>
+                        @elseif($order->status === 'ready')
+                            <div class="bg-success-50 dark:bg-success-500/10 rounded-lg p-3 mb-3">
+                                <p class="text-sm text-success-700 dark:text-success-400">
+                                    <svg class="size-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Makanan siap! Proses pembayaran untuk menyelesaikan.
+                                </p>
+                            </div>
+                        @endif
+
+                        @foreach($nextStatuses as $nextStatus => $config)
                             <form action="{{ route('orders.update-status', $order) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="{{ $nextStatus }}">
-                                <x-ui.button type="submit" variant="primary" class="w-full justify-center">
-                                    {{ $label }}
-                                </x-ui.button>
+                                @if($nextStatus === 'completed' && !$order->isPaid())
+                                    {{-- If completing, suggest payment first --}}
+                                    <x-ui.button href="{{ route('payments.create', $order) }}" variant="success" class="w-full justify-center">
+                                        <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                        </svg>
+                                        Proses Pembayaran & Selesai
+                                    </x-ui.button>
+                                @else
+                                    <x-ui.button type="submit" variant="primary" class="w-full justify-center">
+                                        {{ $config['label'] }}
+                                    </x-ui.button>
+                                @endif
                             </form>
                         @endforeach
 
+                        {{-- Cancel button --}}
                         @if($order->status !== 'cancelled')
-                            <form action="{{ route('orders.update-status', $order) }}" method="POST">
+                            <form action="{{ route('orders.update-status', $order) }}" method="POST" class="mt-2">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="cancelled">

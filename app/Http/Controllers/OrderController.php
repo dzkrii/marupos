@@ -150,17 +150,18 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
-            // Create order
+            // Create order - Auto-confirmed so it appears in Kitchen Display immediately
             $order = Order::create([
                 'outlet_id' => $outletId,
                 'table_id' => $request->table_id,
                 'user_id' => Auth::id(),
                 'order_type' => $request->order_type,
-                'status' => Order::STATUS_PENDING,
+                'status' => Order::STATUS_CONFIRMED,
                 'customer_name' => $request->customer_name,
                 'customer_phone' => $request->customer_phone,
                 'guest_count' => $request->guest_count ?? 1,
                 'notes' => $request->notes,
+                'confirmed_at' => now(),
             ]);
 
             // Create order items

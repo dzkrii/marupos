@@ -1,16 +1,25 @@
-<div class="rounded-xl border border-gray-200 bg-white overflow-hidden flex flex-col h-full transition-all duration-200 hover:shadow-lg dark:border-gray-800 dark:bg-white/[0.03]">
+<div class="rounded-xl border border-gray-200 bg-white overflow-hidden flex flex-col h-full transition-all duration-200 hover:shadow-lg dark:border-gray-800 dark:bg-white/[0.03] {{ $order->status === 'confirmed' ? 'ring-2 ring-brand-400' : '' }}">
     <!-- Card Header -->
-    <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-start {{ $order->status === 'preparing' ? 'bg-warning-50 dark:bg-warning-500/10' : 'bg-gray-50 dark:bg-gray-900' }} dark:border-gray-800">
+    <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-start {{ $order->status === 'preparing' ? 'bg-purple-50 dark:bg-purple-500/10' : 'bg-brand-50 dark:bg-brand-500/10' }} dark:border-gray-800">
         <div>
             <div class="flex items-center gap-2">
-                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 tracking-wider">Meja</span>
-                <span class="text-xl font-bold text-gray-800 dark:text-white/90">{{ $order->table->name ?? 'N/A' }}</span>
+                @if($order->table)
+                    <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 tracking-wider">Meja</span>
+                    <span class="text-xl font-bold text-gray-800 dark:text-white/90">{{ $order->table->name ?? $order->table->number }}</span>
+                @else
+                    <span class="text-xl font-bold text-gray-800 dark:text-white/90">{{ ucfirst(str_replace('_', ' ', $order->order_type)) }}</span>
+                @endif
             </div>
-            <div class="text-xs text-gray-400 font-mono mt-1">#{{ $order->order_number }}</div>
+            <div class="flex items-center gap-2 mt-1">
+                <span class="text-xs text-gray-400 font-mono">#{{ $order->order_number }}</span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold {{ $order->status === 'confirmed' ? 'bg-brand-100 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400' : 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400' }}">
+                    {{ $order->status === 'confirmed' ? 'BARU' : 'DIMASAK' }}
+                </span>
+            </div>
         </div>
         <div class="text-right">
             <span class="text-xs font-medium text-gray-500 dark:text-gray-400 block">Durasi</span>
-            <span class="text-lg font-bold font-mono text-gray-700 dark:text-gray-300" id="timer-{{ $order->id }}">
+            <span class="text-lg font-bold font-mono {{ $order->confirmed_at && $order->confirmed_at->diffInMinutes(now()) > 15 ? 'text-error-600 dark:text-error-400' : 'text-gray-700 dark:text-gray-300' }}" id="timer-{{ $order->id }}">
                 {{ $order->confirmed_at ? $order->confirmed_at->diffForHumans(null, true, true) : '0m' }}
             </span>
         </div>
@@ -74,16 +83,33 @@
 
     <!-- Actions Footer -->
     <div class="p-4 bg-gray-50 border-t border-gray-200 dark:bg-gray-900 dark:border-gray-800">
-        <form action="{{ route('kitchen.mark-ready', $order) }}" method="POST">
-            @csrf
-            <button type="submit" 
-                class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-success-600 hover:bg-success-700 text-white rounded-lg font-medium transition-colors">
-                <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Tandai Semua Siap
-            </button>
-        </form>
+        @if($order->status === 'confirmed')
+            {{-- Order is confirmed but not yet started cooking --}}
+            <form action="{{ route('orders.update-status', $order) }}" method="POST">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" value="preparing">
+                <button type="submit" 
+                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors">
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                    </svg>
+                    Mulai Masak
+                </button>
+            </form>
+        @else
+            {{-- Order is being prepared, show mark as ready button --}}
+            <form action="{{ route('kitchen.mark-ready', $order) }}" method="POST">
+                @csrf
+                <button type="submit" 
+                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-success-600 hover:bg-success-700 text-white rounded-lg font-medium transition-colors">
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Tandai Semua Siap
+                </button>
+            </form>
+        @endif
     </div>
 </div>
 

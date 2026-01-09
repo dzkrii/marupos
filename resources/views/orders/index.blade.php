@@ -83,17 +83,11 @@
                     : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800' }}">
                 Semua
             </a>
-            <a href="{{ route('orders.index', ['status' => 'pending', 'date' => request('date', today()->format('Y-m-d'))]) }}"
-                class="flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ request('status') === 'pending' 
-                    ? 'bg-warning-500 text-white' 
-                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800' }}">
-                Pending
-            </a>
             <a href="{{ route('orders.index', ['status' => 'confirmed', 'date' => request('date', today()->format('Y-m-d'))]) }}"
                 class="flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ request('status') === 'confirmed' 
                     ? 'bg-brand-500 text-white' 
                     : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800' }}">
-                Dikonfirmasi
+                Menunggu
             </a>
             <a href="{{ route('orders.index', ['status' => 'preparing', 'date' => request('date', today()->format('Y-m-d'))]) }}"
                 class="flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ request('status') === 'preparing' 
@@ -105,7 +99,7 @@
                 class="flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ request('status') === 'ready' 
                     ? 'bg-success-500 text-white' 
                     : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800' }}">
-                Siap
+                Siap Saji
             </a>
             <a href="{{ route('orders.index', ['status' => 'completed', 'date' => request('date', today()->format('Y-m-d'))]) }}"
                 class="flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ request('status') === 'completed' 
@@ -131,16 +125,15 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @forelse($orders as $order)
             @php
+                // Simplified status config (4 main statuses)
                 $statusConfig = [
-                    'pending' => ['bg' => 'bg-warning-50 dark:bg-warning-500/15', 'text' => 'text-warning-700 dark:text-warning-400', 'label' => 'Pending'],
-                    'confirmed' => ['bg' => 'bg-brand-50 dark:bg-brand-500/15', 'text' => 'text-brand-700 dark:text-brand-400', 'label' => 'Dikonfirmasi'],
+                    'confirmed' => ['bg' => 'bg-brand-50 dark:bg-brand-500/15', 'text' => 'text-brand-700 dark:text-brand-400', 'label' => 'Menunggu'],
                     'preparing' => ['bg' => 'bg-purple-50 dark:bg-purple-500/15', 'text' => 'text-purple-700 dark:text-purple-400', 'label' => 'Dimasak'],
-                    'ready' => ['bg' => 'bg-success-50 dark:bg-success-500/15', 'text' => 'text-success-700 dark:text-success-400', 'label' => 'Siap'],
-                    'served' => ['bg' => 'bg-brand-50 dark:bg-brand-500/15', 'text' => 'text-brand-700 dark:text-brand-400', 'label' => 'Disajikan'],
+                    'ready' => ['bg' => 'bg-success-50 dark:bg-success-500/15', 'text' => 'text-success-700 dark:text-success-400', 'label' => 'Siap Saji'],
                     'completed' => ['bg' => 'bg-success-50 dark:bg-success-500/15', 'text' => 'text-success-700 dark:text-success-400', 'label' => 'Selesai'],
                     'cancelled' => ['bg' => 'bg-error-50 dark:bg-error-500/15', 'text' => 'text-error-700 dark:text-error-400', 'label' => 'Dibatalkan'],
                 ];
-                $status = $statusConfig[$order->status] ?? $statusConfig['pending'];
+                $status = $statusConfig[$order->status] ?? $statusConfig['confirmed'];
             @endphp
 
             <a href="{{ route('orders.show', $order) }}"
