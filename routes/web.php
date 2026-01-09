@@ -188,9 +188,7 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('order')->name('qr.')->group(function () {
-    Route::get('/{outletSlug}/{tableQr}/login', [\App\Http\Controllers\QrOrderController::class, 'login'])->name('login');
-    Route::post('/{outletSlug}/{tableQr}/verify', [\App\Http\Controllers\QrOrderController::class, 'verify'])->name('verify');
-    Route::get('/{outletSlug}/{tableQr}', [\App\Http\Controllers\QrOrderController::class, 'menu'])->name('menu');
+    // Specific routes first
     Route::post('/cart/add', [\App\Http\Controllers\QrOrderController::class, 'addToCart'])->name('cart.add');
     Route::patch('/cart/update', [\App\Http\Controllers\QrOrderController::class, 'updateCart'])->name('cart.update');
     Route::delete('/cart/remove/{index}', [\App\Http\Controllers\QrOrderController::class, 'removeFromCart'])->name('cart.remove');
@@ -200,6 +198,11 @@ Route::prefix('order')->name('qr.')->group(function () {
     Route::get('/track/{orderNumber}', [\App\Http\Controllers\QrOrderController::class, 'trackOrder'])->name('track');
     Route::get('/receipt/{orderNumber}', [\App\Http\Controllers\QrOrderController::class, 'printReceipt'])->name('receipt');
     Route::get('/status/{orderNumber}', [\App\Http\Controllers\QrOrderController::class, 'getOrderStatus'])->name('status');
+
+    // Dynamic routes last (catch-all)
+    Route::get('/{outletSlug}/{tableQr}/login', [\App\Http\Controllers\QrOrderController::class, 'login'])->name('login');
+    Route::post('/{outletSlug}/{tableQr}/verify', [\App\Http\Controllers\QrOrderController::class, 'verify'])->name('verify');
+    Route::get('/{outletSlug}/{tableQr}', [\App\Http\Controllers\QrOrderController::class, 'menu'])->name('menu');
 });
 
 /*
